@@ -55,7 +55,7 @@ public class Camera {
     Rect rect;//Just a rectangle, used when determining the part of the image being drawn
     boolean textures;//Whether or not I'm drawing textures
     boolean sprites = true;//Whether or not I'm drawing sprites
-    boolean elderscrolls = true;
+    boolean elderscrolls = false;
     double floorindex;
 
     public Camera(double FOV, int RayCount, double Width, double Height) {
