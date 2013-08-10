@@ -5,6 +5,7 @@
 package raycaster;
 
 import Game.GameBase;
+import Hardware_Accelerated.AccelGame;
 
 /**
  *
@@ -16,7 +17,6 @@ public class Raycaster {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.setProperty("sun.java2d.opengl","True");
-        new GameBase(new ThreeDMazeGame(), "3D Maze Game").Run();
+        new AccelGame(new Main(), "3D Maze Game").run();
     }
 }

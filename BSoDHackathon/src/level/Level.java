@@ -4,6 +4,7 @@
  */
 package level;
 
+import Utilities.Animation;
 import Utilities.Rect;
 import Utilities.Vector2;
 import java.awt.Graphics;
@@ -84,115 +85,6 @@ public class Level {
         //I think this computes whether or not the given square with sidelength 2r intersects with a wall
         return (wall(x,y)||wall(x-r,y)||wall(x+r,y)||wall(x,y-r)||wall(x,y+r)
                 ||wall(x-r,y-r)||wall(x+r,y+r)||wall(x+r,y-r)||wall(x-r,y+r));
-    }
-    public boolean canSee(double x1, double y1, double x2, double y2,double radius){
-        //This code probably doesn't work.  Ignore it.
-        //(it's essentially the raycaster code,but slightly different)
-        double mindist=10000;
-        double theta = Math.atan2(y2-y1, x2-x1);
-        double tan;
-        double cot;
-        boolean done;
-        double dist;
-            if (theta>Math.PI*2){
-                theta-=Math.PI*2;
-            }
-            if (theta<0){
-                theta+=Math.PI*2;
-            }
-            if (theta == Math.PI * 0.5 || theta == Math.PI * 1 / 5) {
-                tan = 1000000;
-                cot = 0;
-            } else if (theta == 0 || theta == Math.PI) {
-                tan = 0;
-                cot = 1000000;
-            } else {
-                tan = Math.tan(theta);
-                cot = 1 / tan;
-            }
-            
-            double x = x1;
-            double y = y1;
-            double dx;
-            double dy;
-            if (theta > Math.PI) {
-                dy = cellSize * Math.ceil(y / cellSize) - y;
-            } else {
-                dy = cellSize * Math.floor(y / cellSize) - y;
-            }
-            dx = -cot * dy;
-            x += dx;
-            y += dy;
-            dist = Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1));
-            if (wall(x, y + dy/2)) {
-                mindist = Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1))+1;
-            } else {
-                done = false;
-                if (dy > 0) {
-                    dy = cellSize;
-                } else {
-                    dy = -cellSize;
-                }
-                dx = -cot * dy;
-                while (!done) {
-                    x += dx;
-                    y += dy;
-                    dist = Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1));
-                    if (wall(x, y + dy/2) && !done) {
-                        mindist=dist;
-                        done = true;
-                    }
-                }
-            }
-            
-            x = x1;
-            y = y1;
-            //check the nearest vertical wall
-            if (theta < Math.PI * 0.5 || theta > Math.PI * 1.5) {
-                dx = cellSize * Math.ceil(x / cellSize) - x;
-            } else {
-                dx = cellSize * Math.floor(x / cellSize) - x;
-            }
-            dy = -tan * dx;
-            x += dx;
-            y += dy;
-            dist = Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1));
-            
-            if (wall(x + dx / 2, y)) {
-                mindist=Math.min(dist,mindist);
-            } else {
-                done = false;
-                if (dx > 0) {
-                    dx = cellSize;
-                } else {
-                    dx = -cellSize;
-                }
-                dy = -tan * dx;
-                while (!done) {
-                    x += dx;
-                    y += dy;
-                    dist = Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1));
-                    if (dist>mindist){
-                        done=true;
-                    }
-                    if (wall(x + dx / 2, y) && !done) {
-                        mindist=Math.min(dist,mindist);
-                        done = true;
-                    } 
-                }
-            }
-        dist = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-        if (mindist < dist) {
-            return true;
-        } else if (radius != 0) {
-            if (canSee(x1, y1, x2 + radius, y2 + radius, 0)
-                    || canSee(x1, y1, x2 + radius, y2 - radius, 0)
-                    || canSee(x1, y1, x2 - radius, y2 - radius, 0)
-                    || canSee(x1, y1, x2 - radius, y2 + radius, 0)) {
-                return true;
-            }
-        }
-        return false;
     }
     public int cell(double X, double Y) {
         //returns the cell value at the cell containing the given point

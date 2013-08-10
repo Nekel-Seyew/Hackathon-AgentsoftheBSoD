@@ -4,16 +4,17 @@
  */
 package raycaster;
 
-import Game.Game;
+import Hardware_Accelerated.AGame;
+import Utilities.ImageCollection;
 import Utilities.KeyBoard;
+import bsodhackathon.BSoDHackathon;
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import level.Level;
-import objects.Particle;
 import objects.ParticleManager;
 import objects.Player;
 import objects.Sprite;
@@ -22,34 +23,36 @@ import objects.Sprite;
  *
  * @author pcowal15
  */
-public class ThreeDMazeGame extends Game{
+public class Main extends AGame{
     Camera camera;
     Level level;
     Player player;
     ArrayList<Sprite> sprites;
     ParticleManager particles;
+    public boolean isRebellionHappening;
     
 
     @Override
     public void InitializeAndLoad() {
+        isRebellionHappening=false;
         player=new Player(500,500,0);
         sprites=new ArrayList<Sprite>();
         try {
             level=new Level("src\\Resources/ColorTest.bmp",player,sprites);
         } catch (IOException ex) {
-            Logger.getLogger(ThreeDMazeGame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         camera=new Camera(Math.PI/4,320,640,480);//Field of View, Number of Rays, Width, Height
         //camera=new Camera(Math.PI/4,1279,640,480); //MAX RAY COUNT
         camera.setLevel(level.getWalls()); //
         particles=new ParticleManager(Color.BLUE,-0.1,0.5,0,false,300);//color,gravity,bounciness,air resistance,stickiness,lifetime
         player.setLevel(level.getWalls());
-        this.setBackground(Color.BLACK);
+        this.setBackgroundColor(Color.BLACK);
     }
 
     @Override
     public void UnloadContent() {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
     @Override
@@ -93,7 +96,7 @@ public class ThreeDMazeGame extends Game{
     }
 
     @Override
-    public void Draw(Graphics grphcs) {
+    public void Draw(Graphics2D g, ImageCollection batch) {
         camera.castRays(batch, player.getX(), player.getY(), player.getDir());
         if (sprites!=null){
             for(Sprite o:sprites){
@@ -103,9 +106,19 @@ public class ThreeDMazeGame extends Game{
         }
     }
 
-    @Override
-    public void run() {
-        //throw new UnsupportedOperationException("Not supported yet.");
+    
+    public static void main(String[] args){
+        BSoDHackathon.main(args);
+    }
+    
+    public void giveNextLevel(Level l){
+        this.level=l;
+        camera.setLevel(l.getWalls());
+        player.setLevel(l.getWalls());
+    }
+    
+    public boolean isRebellionHappening(){
+        return isRebellionHappening;
     }
     
 }

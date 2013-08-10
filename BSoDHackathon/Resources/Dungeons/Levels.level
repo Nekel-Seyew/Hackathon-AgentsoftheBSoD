@@ -1,6 +1,6 @@
 $Train={
     @Train.png;
-    #Exit:{->Market,128,60,60}
+    #Exit:{->Market,128,60,60,@marketDoor}
     #Exit:{->Nilfheim,128,10,60}
 }
 
