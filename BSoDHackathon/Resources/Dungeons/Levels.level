@@ -1,0 +1,59 @@
+$Train={
+    @Train.png;
+    #Exit:{->Market,128,60,60}
+    #Exit:{->Nilfheim,128,10,60}
+}
+
+$Market={
+    @Market.png;
+    #Exit:{->Train,60,10,60}
+    #Exit:{->Midgard,255,255,10}
+    #Exit:{->Vanaheim,10,248,255}
+    #Exit:{->Hel,255,255,128}
+    #Exit:{->Muspellsheim,}
+    #Exit:{->Homes,128,234,126}
+    #Exit:{->Svartalfheim,255,5,5}
+    #Exit:{->Asgard,100,100,100}
+}
+
+$Nilfheim={
+    @Nilfheim.png;
+    #Exit:{->Train,60,10,60}
+}
+
+$Midgard={
+    @Midgard.png;
+    #Exit:{->Market,128,60,60}
+}
+
+$Hel={
+    @Hel.png;
+    #Exit:{->Market,128,60,60}
+}
+
+$Vanaheim={
+    @Vanaheim.png;
+    #Exit:{->Market,128,60,60}
+}
+
+$Muspellsheim={
+    @Muspellsheim.png;
+    #Exit:{->Market,128,60,60}
+}
+
+$Homes={
+    @Homes.png
+    #Exit:{->Market,128,60,60}
+    #Exit:{->Svartalfheim,255,5,5}
+}
+
+$Svartalfheim={
+    @Svartalfheim.png
+    #Exit:{->Homes,128,234,126}
+    #Exit:{->Market,128,60,60}
+}
+
+$Asgard={
+    @Asgard.png
+    #Exit:{->Market,128,60,60}
+}
