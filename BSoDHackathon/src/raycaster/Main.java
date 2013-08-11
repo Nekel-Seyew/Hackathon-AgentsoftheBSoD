@@ -8,6 +8,8 @@ import Hardware_Accelerated.AGame;
 import Utilities.Animation;
 import Utilities.ImageCollection;
 import Utilities.KeyBoard;
+import Utilities.Rect;
+import Utilities.SoundFile;
 import Utilities.Vector2;
 import bsodhackathon.BSoDHackathon;
 import java.awt.Color;
@@ -36,6 +38,8 @@ public class Main extends AGame{
     
     Animation begin;
     boolean isStart;
+    long startTimer;
+    SoundFile startSound;
     
 
     @Override
@@ -59,7 +63,10 @@ public class Main extends AGame{
         LevelMaster.makeItemsAndNPC();
         
         isStart=true;
-        begin=new Animation(71,0,new Vector2(400,300),200);
+        begin=new Animation(71,0,new Vector2(400,300),250);
+        makeIntro();
+        startTimer=System.currentTimeMillis();
+        startSound=new SoundFile("Resources/Sound/long_sound_1.wav",0);
     }
 
     @Override
@@ -69,55 +76,74 @@ public class Main extends AGame{
 
     @Override
     public void Update() {
-        player.update(level); 
-        //player movement
-        if(keyboard.isKeyDown('w')||keyboard.isKeyDown(KeyEvent.VK_UP) || keyboard.isKeyDown(KeyBoard.Eight)){
-            player.moveForwards(level);
+        if (!isStart) {
+            player.update(level);
+            //player movement
+            if (keyboard.isKeyDown('w') || keyboard.isKeyDown(KeyEvent.VK_UP) || keyboard.isKeyDown(KeyBoard.Eight)) {
+                player.moveForwards(level);
+            }
+            if (keyboard.isKeyDown(KeyEvent.VK_LEFT) || keyboard.isKeyDown(KeyBoard.Four)) {
+                player.turnLeft();
+                camera.screwFloor(0.5);
+            }
+            if (keyboard.isKeyDown('s') || keyboard.isKeyDown(KeyEvent.VK_DOWN) || keyboard.isKeyDown(KeyBoard.Two)) {
+                player.moveBackwards(level);
+            }
+            if (keyboard.isKeyDown(KeyEvent.VK_RIGHT) || keyboard.isKeyDown(KeyBoard.Six)) {
+                player.turnRight();
+                camera.screwFloor(0.5);
+            }
+            if (keyboard.isKeyDown('a')) {
+                player.moveLeft(level);
+            }
+            if (keyboard.isKeyDown('d')) {
+                player.moveRight(level);
+            }
+            if (keyboard.isKeyDown('e')) {
+                player.swingSword();
+            }
+            camera.screwFloor(player.speed() / 10);
+
+            //scope
+            if (keyboard.isKeyDown(KeyEvent.VK_SPACE)) {
+                camera.setFOV(camera.fov + (Math.PI / 12 - camera.fov) * 0.1);
+                player.setDirSpeed(Math.PI / 360);
+            } else {
+                camera.setFOV(camera.fov + (Math.PI / 4 - camera.fov) * 0.1);
+                player.setDirSpeed(Math.PI / 90);
+            }
+            camera.setZ(player.getZ(), 0);
+            level.update(player, this);
+        }else{
+            if(keyboard.isKeyDown(KeyEvent.VK_SPACE)){
+                isStart=false;
+                if(startSound.isAlive()){
+                    startSound.kill();
+                }
+            }
+            if(!startSound.isAlive()){
+                startSound.start();
+            }
         }
-        if(keyboard.isKeyDown(KeyEvent.VK_LEFT)||keyboard.isKeyDown(KeyBoard.Four)){
-            player.turnLeft();
-            camera.screwFloor(0.5);
-        }
-        if(keyboard.isKeyDown('s')||keyboard.isKeyDown(KeyEvent.VK_DOWN)||keyboard.isKeyDown(KeyBoard.Two)){
-            player.moveBackwards(level);
-        }
-        if(keyboard.isKeyDown(KeyEvent.VK_RIGHT)||keyboard.isKeyDown(KeyBoard.Six)){
-            player.turnRight();
-            camera.screwFloor(0.5);
-        }
-        if(keyboard.isKeyDown('a')){
-            player.moveLeft(level);
-        }
-        if(keyboard.isKeyDown('d')){
-            player.moveRight(level);
-        }
-        if(keyboard.isKeyDown('e')){
-            player.swingSword();
-        }
-        camera.screwFloor(player.speed()/10);
-        
-        //scope
-        if(keyboard.isKeyDown(KeyEvent.VK_SPACE)){
-            camera.setFOV(camera.fov+(Math.PI/12-camera.fov)*0.1);
-            player.setDirSpeed(Math.PI/360);
-        }
-        else{
-            camera.setFOV(camera.fov+(Math.PI/4-camera.fov)*0.1);
-            player.setDirSpeed(Math.PI/90);
-        }
-        camera.setZ(player.getZ(), 0);
-        level.update(player, this);
     }
 
     @Override
     public void Draw(Graphics2D g, ImageCollection batch) {
-        player.Draw(batch);
-        camera.castRays(batch, player.getX(), player.getY(), player.getDir());
-        if (sprites!=null){
-            for(Sprite o:sprites){
-                camera.drawImage(batch,level,player, o.sprite(), o.x(), o.y(), true);
+        if (!isStart) {
+            player.Draw(batch);
+            camera.castRays(batch, player.getX(), player.getY(), player.getDir());
+            if (sprites != null) {
+                for (Sprite o : sprites) {
+                    camera.drawImage(batch, level, player, o.sprite(), o.x(), o.y(), true);
+                }
+
             }
-            
+        }else{
+            if(System.currentTimeMillis()-startTimer >= 15500){
+                isStart=false;
+            }
+            Rect r=new Rect(0,0,(int)begin.getWidth(),(int)begin.getHeight(),0);
+            begin.Draw(batch,0f,r,3f,3f);
         }
     }
 
@@ -133,6 +159,21 @@ public class Main extends AGame{
     
     public boolean isRebellionHappening(){
         return isRebellionHappening;
+    }
+    
+    public void makeIntro(){
+        String path="Resources/Sprites/Introanimation";
+        for(int i=1; i<72; i++){
+            try{
+                if(i>=50 && i<60){
+                    continue;
+                }
+                begin.addCell(path+"/"+i+".png");
+                
+            }catch(Exception e){
+                System.out.println(path+"/"+i+".png");
+            }
+        }
     }
     
 }
