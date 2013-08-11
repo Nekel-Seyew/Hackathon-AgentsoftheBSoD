@@ -3,3 +3,5 @@
 #Wall:{128,0,0,@metal.png}
 #Wall:{0,128,0,@metal_dark.png}
 #Wall:{0,0,128,@metal.png}
+#Wall:{200,200,200,@tombstone1.png}
+#Wall:{100,100,100,@tombstone2.png}
