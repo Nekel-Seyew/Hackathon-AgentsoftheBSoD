@@ -2,4 +2,4 @@
 #Wall:{200,0,0,@brickwall.png}
 #Wall:{128,0,0,@metal.png}
 #Wall:{0,128,0,@metal_dark.png}
-#Wall:{0,0,128,@metalwall.png}
+#Wall:{0,0,128,@metal.png}
