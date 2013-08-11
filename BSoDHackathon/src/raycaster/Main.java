@@ -5,6 +5,7 @@
 package raycaster;
 
 import Hardware_Accelerated.AGame;
+import Utilities.Animation;
 import Utilities.ImageCollection;
 import Utilities.KeyBoard;
 import bsodhackathon.BSoDHackathon;
@@ -32,6 +33,9 @@ public class Main extends AGame{
     ParticleManager particles;
     public boolean isRebellionHappening;
     
+    Animation begin;
+    boolean isStart;
+    
 
     @Override
     public void InitializeAndLoad() {
@@ -40,7 +44,7 @@ public class Main extends AGame{
         LevelMaster.makeExists();
         sprites=new ArrayList<Sprite>();
         try {
-            level=new Level("src\\Resources/ColorTest.bmp",player,sprites);
+            level=new Level("Resources/Dungeons/Train.png",player,sprites);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
@@ -50,7 +54,11 @@ public class Main extends AGame{
         particles=new ParticleManager(Color.BLUE,-0.1,0.5,0,false,300);//color,gravity,bounciness,air resistance,stickiness,lifetime
         this.setBackgroundColor(Color.BLACK);
         LevelMaster.makeWalls();
+        LevelMaster.makeExists();
         LevelMaster.makeItemsAndNPC();
+        
+        isStart=true;
+//        begin=new Animation()
     }
 
     @Override

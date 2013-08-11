@@ -42,10 +42,11 @@ public class Exit {
     
     public Level next(Player p, boolean rebel){
         try {
+            System.out.println(next);
             if(rebel){
-                return new Level(next.concat("2.png"), p, new ArrayList<Sprite>());
+                return new Level(c,"Resources/Dungeons/"+next.concat("2.png"), p, new ArrayList<Sprite>());
             }else{
-                return new Level(next.concat(".png"), p, new ArrayList<Sprite>());
+                return new Level(c,"Resources/Dungeons/"+next.concat(".png"), p, new ArrayList<Sprite>());
             }
         } catch (IOException ex) {
             Logger.getLogger(Exit.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
