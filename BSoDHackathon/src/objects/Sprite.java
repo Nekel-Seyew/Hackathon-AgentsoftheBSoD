@@ -38,12 +38,13 @@ public abstract class Sprite {
     }
     public abstract void Update(Player p);
     
-    public void hit(double damage){
-        if (health>0){
-            health-=damage;
-            if (health<=0){
-                alive=false;
-            }
+    public void hit(double damage) {
+        if (health > 0) {
+            health -= damage;
+
+        }
+        if (health <= 0) {
+            alive = false;
         }
     }
     public boolean alive(){

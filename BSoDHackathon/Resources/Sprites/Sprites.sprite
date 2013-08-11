@@ -1,4 +1,5 @@
-#NPC:{123,123,123,@Guy1Sprites};
+#NPC:{123,123,0,@Guy1Sprites};
+#NPC:{123,0,123,@Guy2Sprites};
 
 #Item:{22,22,22,@health.png};
 

@@ -5,6 +5,7 @@
 package raycaster;
 
 import Advance.AMath;
+import Utilities.Animation;
 import Utilities.Image2D;
 import Utilities.ImageCollection;
 import Utilities.Rect;
@@ -434,6 +435,32 @@ public class Camera {
             Image2D s = new Image2D(sprite);
 
             batch.Draw(s, new Vector2(screenX, screenHeight / 2 + zoffset * imageHeight + zangle), 0, (float) (imageHeight / cellSize), (float) (imageHeight / cellSize), imageHeight + 1000);
+        }
+    }
+    
+    public void drawImage(ImageCollection batch, Player player, Animation sprite, double X, double Y, boolean fog){
+        x = player.getX();
+        y = player.getY();
+        angle = player.getDir();
+        double angle2 = -Math.atan2(Y - y, X - x);
+
+        double dist = Math.sqrt((X - x) * (X - x) + (Y - y) * (Y - y));
+        angleOffset = (angle2 - angle - Math.PI) % (Math.PI * 2) + Math.PI;
+
+        int imageHeight = (int) (sf / (dist * Math.cos(angleOffset)));
+        if (Math.abs(angleOffset) < fov * 0.6 && dist < clip) {
+            screenX = screenWidth / 2 - angleOffset * screenWidth / fov;
+
+            if (sprites) {
+                sprite.Draw(batch, 0f,
+                        new Vector2(screenX, screenHeight / 2 + zoffset * imageHeight + zangle),
+                        (float) (imageHeight / cellSize), 
+                        (float) (imageHeight / cellSize), 
+                        imageHeight + 1000, 
+                        new Rect(0,0,(int)sprite.getWidth(),(int)sprite.getHeight(),0f));
+//                batch.Draw(sprite, new Vector2(screenX, screenHeight / 2 + zoffset * imageHeight + zangle), 0, (float) (imageHeight / cellSize), (float) (imageHeight / cellSize), imageHeight + 1000);
+            }
+
         }
     }
 

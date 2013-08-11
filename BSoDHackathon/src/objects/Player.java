@@ -38,6 +38,8 @@ public class Player {
     MeleeWeapon mw;
     ArrayList<StoryJournal> entries;
     
+    double health;
+    
     public Player(double x, double y, double angle){
         pos=new Vector2(x,y);
         direction=angle;
