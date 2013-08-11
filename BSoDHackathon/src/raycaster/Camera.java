@@ -80,7 +80,7 @@ public class Camera {
             rayTexs[i] = -1;
             if (textures) {
                 //This is a lot of images.  4*rayCount, to be exact.  So that's like 1280
-                brick[i] = new Image2D("src/Resources/brick.png");
+                brick[i] = new Image2D("Resources/Sprites/ironwall.png");
                 brick2[i] = new Image2D("src/Resources/brick2.png");
                 stone[i] = new Image2D("src/Resources/metal.png");
                 metal[i] = new Image2D("src/Resources/metal_dark.png");
