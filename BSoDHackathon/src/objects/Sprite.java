@@ -30,7 +30,7 @@ public abstract class Sprite {
         velocity=new Vector2();
         direction=0;
         speed=1;
-        health=100;
+        health=50;
         alive=true;
     }
     public void Update(){
@@ -70,13 +70,17 @@ public abstract class Sprite {
         displacement.subtract(Position);
         return (displacement.length()<Radius+radius);
     }
-    public void moveTowardsPoint(Vector2 target){
-        direction=Math.atan2(target.getY()+pos.getY(),target.getX()-pos.getX());
-        velocity.setX(Math.cos(direction)*speed);
-        velocity.setY(Math.sin(direction)*speed);
+    public void moveTowardsPoint(Vector2 target) {
+        direction = Math.atan2(target.getY() - pos.getY(), target.getX() - pos.getX());
+        velocity.setX(Math.cos(direction) * speed);
+        velocity.setY(Math.sin(direction) * speed);
     }
     
     public void Alert(){
         this.alerted=true;
+    }
+    
+    public Vector2 getPos(){
+        return this.pos.clone();
     }
 }

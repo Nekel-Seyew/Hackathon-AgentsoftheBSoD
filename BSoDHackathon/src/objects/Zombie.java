@@ -32,13 +32,13 @@ public class Zombie extends Sprite{
         }else if(folder.contains("Guy4")){
             make(4);
         }
-        this.velocity=new Vector2(2,2);
         lastSystemTime=System.currentTimeMillis();
     }
     @Override
     public void Update(Player p) {
-        if(AMath.distance(pos, p.pos) < 400){
+        if (this.getPos().distance(p.pos) < 300) {
             this.moveTowardsPoint(p.pos);
+            this.Update();
         }
         double time=System.currentTimeMillis();
         if (AMath.distance(pos, p.pos) < 100) {
@@ -63,5 +63,7 @@ public class Zombie extends Sprite{
             sprite.addCell("Resources/Sprites/Guy"+j+"Sprites/guy"+j+"fw"+i+".png");
         }
     }
+    
+    
     
 }
