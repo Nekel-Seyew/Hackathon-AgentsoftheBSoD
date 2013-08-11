@@ -55,6 +55,7 @@ public class Player {
         isAttacking=false;
         entries=new ArrayList<>();
         entries.add(StoryJournal.story.get(0));
+        health=100;
     }
     public double speed(){
         return Math.sqrt(hspeed*hspeed+vspeed*vspeed);
@@ -174,5 +175,17 @@ public class Player {
     
     public boolean collides(Vector2 p){
         return AMath.distance(p, this.pos) < 100;
+    }
+    
+    public void giveDamage(double d){
+        this.health-=d;
+    }
+    
+    public boolean hasWon(){
+        return this.entries.size() >=10;
+    }
+    
+    public double getHelath(){
+        return this.health;
     }
 }

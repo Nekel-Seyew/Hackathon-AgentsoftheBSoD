@@ -19,6 +19,7 @@ import javax.imageio.ImageIO;
 import objects.Pillar;
 import objects.Player;
 import objects.Sprite;
+import objects.Zombie;
 import raycaster.Camera;
 import raycaster.Main;
 
@@ -151,6 +152,7 @@ public class Level {
 //                    exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j]));
                 }
                 else{
+                    this.Zombie(color, i, j);
                     walls[i][j]=0;
                 }
             }
@@ -209,6 +211,11 @@ public class Level {
     
     public void Draw(Camera camera, Player player, ImageCollection batch) {
         for (Sprite o : sprites) {
+            if(o instanceof Zombie){
+                Zombie z=(Zombie)o;
+                camera.drawImage(batch, player, z.getSprite(), z.x(), z.y(), true);
+                continue;
+            }
             camera.drawImage(batch, player, o.sprite(), o.x(), o.y(), true);
         }
     }
@@ -266,5 +273,25 @@ public class Level {
         StoryJournal sj=StoryJournal.story.get(LevelMaster.story.get(new Color(color[0],color[1],color[2])).intValue());
         sprites.add(sj);
         sj.givePos(new Vector2(i*64+32,j*64+32));
+    }
+    
+    public void Zombie(int[] color, int i, int j){
+        if(colorEqual(color, new Color(123,123,0))){
+            walls[i][j]=0;
+            String s=LevelMaster.NPC.get(new Color(123,123,0));
+            sprites.add(new Zombie(s,new Vector2(i*64+32,j*64+32)));
+        }else if(colorEqual(color, new Color(123,0,123))){
+            walls[i][j]=0;
+            String s=LevelMaster.NPC.get(new Color(123,0,123));
+            sprites.add(new Zombie(s,new Vector2(i*64+32,j*64+32)));
+        }else if(colorEqual(color, new Color(32,123,150))){
+            walls[i][j]=0;
+            String s=LevelMaster.NPC.get(new Color(32,123,150));
+            sprites.add(new Zombie(s,new Vector2(i*64+32,j*64+32)));
+        }else if(colorEqual(color, new Color(122,35,111))){
+            walls[i][j]=0;
+            String s=LevelMaster.NPC.get(new Color(122,35,111));
+            sprites.add(new Zombie(s,new Vector2(i*64+32,j*64+32)));
+        }
     }
 }

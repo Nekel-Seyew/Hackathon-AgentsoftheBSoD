@@ -1,6 +1,6 @@
 $0:My name is James Odinson.;
 #My Mission is to infiltrate this old facility;
-#and steal the secrets of how to un-irradiate things.;
+#and steal the secrets of how to un-irradiate things, stored on CDs.;
 #Beyond that, I don't remember much.;
 &end;
 

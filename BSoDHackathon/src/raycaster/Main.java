@@ -168,6 +168,7 @@ public class Main extends AGame{
                 batch.DrawString(new Vector2(680, 50), "Arrows to Turn", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
                 batch.DrawString(new Vector2(680, 65), "E to Swing Sword", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
                 batch.DrawString(new Vector2(20, 500), "Current Location: "+this.currentLocation, Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
+                batch.DrawString(new Vector2(20, 515), "Health: "+this.player.getHelath(), Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
             }
         }else{
             if(System.currentTimeMillis()-startTimer >= 15500){

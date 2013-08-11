@@ -114,7 +114,7 @@ public class LevelMaster {
                     aaaa=bS;
                     int b=Integer.parseInt(bS.substring(0, bS.indexOf(',')));
                     Color rgb=new Color(r,g,b);
-                    items.put(rgb, next);
+                    NPC.put(rgb, next);
                 }
                 else if(string.contains("#Item")){
                     String next=string.substring(string.indexOf("@")+1, string.indexOf('}'));
