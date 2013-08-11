@@ -4,7 +4,9 @@
  */
 package level;
 
+import MenuAndStory.StoryJournal;
 import Utilities.Animation;
+import Utilities.ImageCollection;
 import Utilities.Rect;
 import Utilities.Vector2;
 import java.awt.Color;
@@ -17,6 +19,7 @@ import javax.imageio.ImageIO;
 import objects.Pillar;
 import objects.Player;
 import objects.Sprite;
+import raycaster.Camera;
 import raycaster.Main;
 
 /**
@@ -31,13 +34,15 @@ public class Level {
     double cellSize=64;//The cells in the game are 64 by 64, as are the wall textures.
     
     public ArrayList<Exit> exits;
-    ArrayList<Sprite> sprites;
+    public ArrayList<Sprite> sprites;
+    public ArrayList<Sprite> setForRemove;
     
     
     public Level(String map,Player player,ArrayList<Sprite>objects) throws IOException{
         inst=this;
         exits=new ArrayList<>();
         sprites=objects;
+        setForRemove=new ArrayList<>();
         //This code draws an image to a graphics thingy and gets the BufferedImage off of it
         BufferedImage mapImage = ImageIO.read(new File(map));
         int type = mapImage.getType();
@@ -112,7 +117,16 @@ public class Level {
                 }else if(colorEqual(color, new Color(32,45,54))){
                     walls[i][j]=0;
                     
-                } else if (color[0]==255 && color[1]==0 && color[2]==0){
+                }else if(colorEqual(color,new Color(176,0,0))){
+                    walls[i][j]=28;
+                    LevelMaster.w.put(28, wall[i][j]);
+                }else if(colorEqual(color,new Color(176,0,176))){
+                    walls[i][j]=29;
+                    LevelMaster.w.put(29, wall[i][j]);
+                }else if(colorEqual(color,new Color(177,0,0))){
+                    walls[i][j]=30;
+                    LevelMaster.w.put(30, wall[i][j]);
+                }else if (color[0]==255 && color[1]==0 && color[2]==0){
                     walls[i][j]=0;//blank spot
                     //adds a pixelated column
                     objects.add(new Pillar(new Vector2(i*64+32,j*64+32)));
@@ -127,7 +141,10 @@ public class Level {
                     walls[i][j]=0;//blank spot
                     //sets the player's position to the current cell
                     player.setPos(i*64+32,j*64+32);
-                }else if(isExit(color[0],color[1],color[2])){
+                }else if(isCD(color)){
+                    this.makeCD(color, i, j);
+                }
+                else if(isExit(color[0],color[1],color[2])){
                     addDoor(i,j,color,player,map);
 //                    walls[i][j]=5;
 //                    LevelMaster.w.put(5, wall[i][j]);
@@ -183,7 +200,16 @@ public class Level {
             e.update(p, game);
         }
         for(Sprite s: sprites){
-            s.Update();
+            s.Update(p);
+        }
+        for(Sprite s: setForRemove){
+            sprites.remove(s);
+        }
+    }
+    
+    public void Draw(Camera camera, Player player, ImageCollection batch) {
+        for (Sprite o : sprites) {
+            camera.drawImage(batch, player, o.sprite(), o.x(), o.y(), true);
         }
     }
     
@@ -230,5 +256,15 @@ public class Level {
     
     public boolean colorEqual(int[] color, Color c){
         return color[0]==c.getRed() && color[1]==c.getGreen() && color[2]==c.getBlue();
+    }
+    
+    public boolean isCD(int[] color){
+        return color[0]==32 && color[0]==32 && color[2]<10;
+    }
+    public void makeCD(int[] color, int i, int j){
+        walls[i][j]=0;
+        StoryJournal sj=StoryJournal.story.get(LevelMaster.story.get(new Color(color[0],color[1],color[2])).intValue());
+        sprites.add(sj);
+        sj.givePos(new Vector2(i*64+32,j*64+32));
     }
 }

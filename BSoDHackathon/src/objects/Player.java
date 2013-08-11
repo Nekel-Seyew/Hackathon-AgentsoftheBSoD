@@ -4,6 +4,7 @@
  */
 package objects;
 
+import Advance.AMath;
 import MenuAndStory.StoryJournal;
 import Utilities.ImageCollection;
 import Utilities.Vector2;
@@ -51,6 +52,7 @@ public class Player {
         mw=new MeleeWeapon("Resources/Sprites/sword.png");
         isAttacking=false;
         entries=new ArrayList<>();
+        entries.add(StoryJournal.story.get(0));
     }
     public double speed(){
         return Math.sqrt(hspeed*hspeed+vspeed*vspeed);
@@ -168,4 +170,7 @@ public class Player {
         return entries;
     }
     
+    public boolean collides(Vector2 p){
+        return AMath.distance(p, this.pos) < 100;
+    }
 }

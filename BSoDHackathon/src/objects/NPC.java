@@ -17,7 +17,7 @@ public class NPC extends Sprite{
         super(s,p);
     }
     
-    public void update(Player p){
+    public void Update(Player p){
         if(p.isAttacking && AMath.distance(pos, p.pos)<100){
             this.health-=1;
         }

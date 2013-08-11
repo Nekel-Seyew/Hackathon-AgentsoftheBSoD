@@ -36,6 +36,8 @@ public abstract class Sprite {
     public void Update(){
         pos.add(velocity);
     }
+    public abstract void Update(Player p);
+    
     public void hit(double damage){
         if (health>0){
             health-=damage;

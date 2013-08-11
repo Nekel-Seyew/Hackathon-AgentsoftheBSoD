@@ -133,7 +133,7 @@ public class Main extends AGame{
             camera.setZ(player.getZ(), 0);
             level.update(player, this);
         }else if(!menu.exitMenu){
-            menu.Update(keyboard);
+            menu.Update(keyboard,player);
         }
         else{
             if(keyboard.isKeyDown(KeyEvent.VK_SPACE)){
@@ -158,9 +158,10 @@ public class Main extends AGame{
             camera.castRays(batch, player.getX(), player.getY(), player.getDir());
             if (sprites != null) {
                 for (Sprite o : sprites) {
-                    camera.drawImage(batch, level, player, o.sprite(), o.x(), o.y(), true);
+                    camera.drawImage(batch, player, o.sprite(), o.x(), o.y(), true);
                 }
             }
+            level.Draw(camera, player, batch);
             if (menu.exitMenu) {
                 batch.DrawString(new Vector2(680, 20), "M for Menu", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
                 batch.DrawString(new Vector2(680, 35), "WASD to Move", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);

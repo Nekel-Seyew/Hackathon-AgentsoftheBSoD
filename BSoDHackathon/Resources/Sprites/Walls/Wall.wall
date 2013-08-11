@@ -14,3 +14,6 @@
 #Wall:{0,20,255,@tube_computer.png}
 #Wall:{20,20,20,@tubewalls.png}
 #Wall:{100,25,50,@shop_door.png}
+#Wall:{176,0,0,@bricks.png}
+#Wall:{176,0,176,@bricksdoor.png}
+#Wall:{177,0,0,@brickwindow.png}

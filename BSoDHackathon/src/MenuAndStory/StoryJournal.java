@@ -9,6 +9,8 @@ import Utilities.Vector2;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+import level.Level;
+import objects.Player;
 import objects.Sprite;
 
 /**
@@ -17,14 +19,12 @@ import objects.Sprite;
  */
 public class StoryJournal extends Sprite{
     public static ArrayList<StoryJournal>story=new ArrayList<>();
-    
-    Image2D sprite;
-    String sayings;
     int i;
+    ArrayList<String> sayings;
     
-    public StoryJournal(String s, int i){
+    public StoryJournal(ArrayList s, int i){
         super("Resources/Sprites/cd.png",new Vector2());
-        sayings=new String(s);
+        sayings=s;
         this.i=i;
     }
     
@@ -37,23 +37,42 @@ public class StoryJournal extends Sprite{
             Scanner reader = new Scanner(new File("Resources/Story.story"));
             String build="";
             int num=0;
+            ArrayList<String> mys=new ArrayList<>();
             while(reader.hasNextLine()){
                 String string=reader.nextLine();
                 if(string.startsWith("$")){
                     num=Integer.parseInt(string.substring(string.indexOf('$')+1,string.indexOf(':')));
-                    build+=string.substring(string.indexOf(':')+1, string.indexOf(';'));
-                    build+="\n";
+                    build=string.substring(string.indexOf(':')+1, string.indexOf(';'));
+                    mys.add(build);
                 }
                 if(string.startsWith("#")){
-                    build+=string.substring(string.indexOf('#')+1, string.indexOf(';'));
+                    build=string.substring(string.indexOf('#')+1, string.indexOf(';'));
+                    mys.add(build);
                 }
                 if(string.contains("&end;")){
-                    story.add(num, new StoryJournal(build,num));
+                    story.add(num, new StoryJournal(mys,num));
+                    mys=new ArrayList<>();
                 }
             }
         }catch(Exception e){
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void Update(Player p) {
+        if(p.collides(pos)){
+            p.giveEntry(this);
+            Level.inst.setForRemove.add(this);
+        }
+    }
     
+    public boolean equals(Object o){
+        if(o instanceof StoryJournal){
+            StoryJournal sj=(StoryJournal)o;
+            return sj.i==this.i;
+        }else{
+            return false;
+        }
+    }
 }

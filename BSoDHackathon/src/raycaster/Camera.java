@@ -437,7 +437,7 @@ public class Camera {
         }
     }
 
-    public void drawImage(ImageCollection batch, Level level, Player player, Image2D sprite, double X, double Y, boolean fog) {
+    public void drawImage(ImageCollection batch, Player player, Image2D sprite, double X, double Y, boolean fog) {
         x = player.getX();
         y = player.getY();
         angle = player.getDir();

@@ -17,5 +17,10 @@ public class Pillar extends Sprite{
         health=-1;
         radius=5;
     }
+
+    @Override
+    public void Update(Player p) {
+        
+    }
     
 }
