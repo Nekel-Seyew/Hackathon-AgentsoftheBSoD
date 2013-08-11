@@ -1,1 +1,2 @@
-#Wall:{0,0,0,@ironwall.png};
+#Wall:{0,0,0,@ironwall.png}
+#Wall:{200,0,0@brickwall.png}
