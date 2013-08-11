@@ -44,9 +44,9 @@ public class Exit {
         try {
             System.out.println(next);
             if(rebel){
-                return new Level(c,"Resources/Dungeons/"+next.concat("2.png"), p, new ArrayList<Sprite>());
+                return new Level("Resources/Dungeons/"+next.concat("2.png"), p, new ArrayList<Sprite>());
             }else{
-                return new Level(c,"Resources/Dungeons/"+next.concat(".png"), p, new ArrayList<Sprite>());
+                return new Level("Resources/Dungeons/"+next.concat(".png"), p, new ArrayList<Sprite>());
             }
         } catch (IOException ex) {
             Logger.getLogger(Exit.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
