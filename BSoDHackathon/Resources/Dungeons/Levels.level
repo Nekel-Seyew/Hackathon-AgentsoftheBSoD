@@ -12,6 +12,7 @@ $Market={
     #Exit:{->Midgard,255,255,10,}
     #Exit:{->Vanaheim,10,248,255,}
     #Exit:{->Hel,255,255,128,}
+    #Exit:{->Muspellsheim,60,60,50,}
     #Exit:{->Homes,128,234,126,}
     #Exit:{->Svartalfheim,255,5,5,}
     #Exit:{->Asgard,100,100,100,}
