@@ -1,2 +1,3 @@
-#Wall:{0,0,0,@ironwall.png}
-#Wall:{200,0,0@brickwall.png}
+#Wall:{0,0,0,@metalwall.png}
+#Wall:{200,0,0@bricks.png}
+#Wall:{200,200,0@wheat.png}
