@@ -32,6 +32,7 @@ public class Menu {
     ArrayList<StoryJournal> st;
     Iterator<StoryJournal> next;
     StoryJournal current;
+    int i=0;
     
     public Menu(){
         cover= new Image2D("Resources/Sprites/MenuCover.png");
@@ -51,6 +52,7 @@ public class Menu {
             journal=false;
         }
         if(k.isKeyDown('j')){
+            i=0;
             st=p.getAllEntries();
             next=st.iterator();
             journal=true;
@@ -78,11 +80,9 @@ public class Menu {
 
         @Override
         public void keyTyped(KeyEvent e) {
-            if(e.getKeyChar()=='n' && next.hasNext()){
-                StoryJournal sj= next.next();
-                if(sj.equals(current)){
-                    current=next.next();
-                }
+            if(e.getKeyChar()=='n' && i<st.size()){
+                current=st.get(i);
+                i++;
             }
         }
 

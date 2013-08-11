@@ -8,10 +8,11 @@ import Advance.AMath;
 import Utilities.Animation;
 import Utilities.Vector2;
 import raycaster.Camera;
+import level.Level;
 
 /**
  *
- * @author pcowal15
+ * @author Kyle Sweeney
  */
 public class Zombie extends Sprite{
 
@@ -33,9 +34,13 @@ public class Zombie extends Sprite{
             make(4);
         }
         lastSystemTime=System.currentTimeMillis();
+        this.health*=strength;
     }
     @Override
     public void Update(Player p) {
+        if(this.health <= 0){
+             Level.inst.setForRemove.add(this);
+        }
         if (this.getPos().distance(p.pos) < 300) {
             this.moveTowardsPoint(p.pos);
             this.Update();
@@ -47,7 +52,7 @@ public class Zombie extends Sprite{
                 lastSystemTime = time;
             }
         }
-        if(AMath.distance(pos, p.pos) < 71 && p.isAttacking){
+        if(AMath.distance(pos, p.pos) < 100 && p.isAttacking()){
             this.health-=10;
         }
         this.Update();

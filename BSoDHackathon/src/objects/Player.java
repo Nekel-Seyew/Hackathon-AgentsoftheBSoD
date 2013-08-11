@@ -158,7 +158,7 @@ public class Player {
     }
     
     public boolean isAttacking(){
-        return isAttacking();
+        return isAttacking;
     }
     
     public void exitLevel(Exit e){
