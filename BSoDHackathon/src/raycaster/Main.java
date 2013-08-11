@@ -37,6 +37,7 @@ public class Main extends AGame{
     public void InitializeAndLoad() {
         isRebellionHappening=false;
         player=new Player(500,500,0);
+        LevelMaster.makeExists();
         sprites=new ArrayList<Sprite>();
         try {
             level=new Level("src\\Resources/ColorTest.bmp",player,sprites);
@@ -48,7 +49,8 @@ public class Main extends AGame{
         camera.setLevel(level.getWalls()); //
         particles=new ParticleManager(Color.BLUE,-0.1,0.5,0,false,300);//color,gravity,bounciness,air resistance,stickiness,lifetime
         this.setBackgroundColor(Color.BLACK);
-        LevelMaster.make();
+        LevelMaster.makeWalls();
+        LevelMaster.makeItemsAndNPC();
     }
 
     @Override
@@ -95,8 +97,7 @@ public class Main extends AGame{
             player.setDirSpeed(Math.PI/90);
         }
         camera.setZ(player.getZ(), 0);
-        particles.update(level);
-        if(Math.random()<0.1)particles.addExplosion(96,96,32,2,10);
+        level.update(player, this);
     }
 
     @Override
@@ -107,7 +108,7 @@ public class Main extends AGame{
             for(Sprite o:sprites){
                 camera.drawImage(batch,level,player, o.sprite(), o.x(), o.y(), true);
             }
-            particles.draw(batch, camera, player);
+            
         }
     }
 

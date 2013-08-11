@@ -343,7 +343,6 @@ public class Camera {
             if(w==null){
                 int g=0;
             }
-            
             batch.Draw(w[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
         }
         

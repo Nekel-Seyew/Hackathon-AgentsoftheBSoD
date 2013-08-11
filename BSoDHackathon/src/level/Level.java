@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import objects.Pillar;
 import objects.Player;
 import objects.Sprite;
+import raycaster.Main;
 
 /**
  *
@@ -26,7 +27,11 @@ public class Level {
     Color[][] wall;
     int[][] walls;//I'm representing the walls as integers here, with the integers corresponding to textures/colors
     double cellSize=64;//The cells in the game are 64 by 64, as are the wall textures.
+    
+    ArrayList<Exit> exits;
+    
     public Level(String map,Player player,ArrayList<Sprite>objects) throws IOException{
+        exits=new ArrayList<>();
         //This code draws an image to a graphics thingy and gets the BufferedImage off of it
         BufferedImage mapImage = ImageIO.read(new File(map));
         int type = mapImage.getType();
@@ -80,6 +85,8 @@ public class Level {
                     player.setPos(i*64+32,j*64+32);
                 }else if(isExit(color[0],color[1],color[2])){
                     LevelMaster.w.put(5, wall[i][j]);
+                    exits.add(new Exit(LevelMaster.exits.get(wall[i][j])
+                            ,new Vector2(i*64+32,j*64+32),wall[i][j]));
                 }
                 else{
                     walls[i][j]=0;
@@ -123,6 +130,12 @@ public class Level {
         }
         catch(Exception e){
             return true;
+        }
+    }
+    
+    public void update(Player p, Main game){
+        for(Exit e : exits){
+            e.update(p, game);
         }
     }
     

@@ -23,6 +23,9 @@ public class LevelMaster {
     public static Hashtable<Color, Image2D[]> walls=new Hashtable<Color, Image2D[]>();
     public static Hashtable<Integer, Color> w=new Hashtable<>();
     
+    public static Hashtable<Color, String> items=new Hashtable<>();
+    public static Hashtable<Color, String> NPC=new Hashtable<>();
+    
     static String a;
     static String aa;
     static String aaa;
@@ -50,7 +53,6 @@ public class LevelMaster {
         }catch(Exception e){
             e.printStackTrace();
         }
-        
     }
     
     public static void makeWalls(){
@@ -87,11 +89,48 @@ public class LevelMaster {
         }
     }
     
+    public static void makeItemsAndNPC(){
+        try{
+            Scanner reader = new Scanner(new File("Resources/Sprites/Sprites.sprite"));
+            while(reader.hasNext()){
+                String string=reader.nextLine();
+                if(string.contains("#NPC:")){
+                    String next=string.substring(string.indexOf("@")+1, string.indexOf('}'));
+                    a=next;
+                    String rS=string.substring(string.indexOf("{")+1);
+                    int r=Integer.parseInt(rS.substring(0, rS.indexOf(',')));
+                    String gS=rS.substring(rS.indexOf(',')+1);
+                    int g=Integer.parseInt(gS.substring(0, gS.indexOf(',')));
+                    String bS=gS.substring(gS.indexOf(',')+1);
+                    aaaa=bS;
+                    int b=Integer.parseInt(bS.substring(0, bS.indexOf(',')));
+                    Color rgb=new Color(r,g,b);
+                    items.put(rgb, next);
+                }
+                else if(string.contains("#Item")){
+                    String next=string.substring(string.indexOf("@")+1, string.indexOf('}'));
+                    a=next;
+                    String rS=string.substring(string.indexOf("{")+1);
+                    int r=Integer.parseInt(rS.substring(0, rS.indexOf(',')));
+                    String gS=rS.substring(rS.indexOf(',')+1);
+                    int g=Integer.parseInt(gS.substring(0, gS.indexOf(',')));
+                    String bS=gS.substring(gS.indexOf(',')+1);
+                    aaaa=bS;
+                    int b=Integer.parseInt(bS.substring(0, bS.indexOf(',')));
+                    Color rgb=new Color(r,g,b);
+                    items.put(rgb, next);
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     
     
     public static void make(){
         makeExists();
         makeWalls();
+        makeItemsAndNPC();
     }
     
     public static boolean isExit(Color c) {
