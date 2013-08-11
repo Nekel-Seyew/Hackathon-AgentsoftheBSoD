@@ -80,6 +80,9 @@ public class Main extends AGame{
         if(keyboard.isKeyDown('d')){
             player.moveRight(level);
         }
+        if(keyboard.isKeyDown('e')){
+            player.swingSword();
+        }
         camera.screwFloor(player.speed()/10);
         
         //scope
@@ -98,6 +101,7 @@ public class Main extends AGame{
 
     @Override
     public void Draw(Graphics2D g, ImageCollection batch) {
+        player.Draw(batch);
         camera.castRays(batch, player.getX(), player.getY(), player.getDir());
         if (sprites!=null){
             for(Sprite o:sprites){
