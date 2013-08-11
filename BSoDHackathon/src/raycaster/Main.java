@@ -8,6 +8,7 @@ import Hardware_Accelerated.AGame;
 import Utilities.Animation;
 import Utilities.ImageCollection;
 import Utilities.KeyBoard;
+import Utilities.Vector2;
 import bsodhackathon.BSoDHackathon;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -58,7 +59,7 @@ public class Main extends AGame{
         LevelMaster.makeItemsAndNPC();
         
         isStart=true;
-//        begin=new Animation()
+        begin=new Animation(71,0,new Vector2(400,300),200);
     }
 
     @Override
