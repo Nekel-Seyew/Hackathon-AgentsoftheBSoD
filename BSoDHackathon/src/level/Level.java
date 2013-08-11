@@ -31,7 +31,7 @@ public class Level {
     ArrayList<Exit> exits;
     ArrayList<Sprite> sprites;
     
-    public Level(Color door, String map,Player player,ArrayList<Sprite>objects) throws IOException{
+    public Level(boolean door, String map,Player player,ArrayList<Sprite>objects) throws IOException{
         exits=new ArrayList<>();
         sprites=objects;
         //This code draws an image to a graphics thingy and gets the BufferedImage off of it
@@ -85,13 +85,11 @@ public class Level {
                     walls[i][j]=0;//blank spot
                     //sets the player's position to the current cell
 //                    player.setPos(i*64+32,j*64+32);
-                }else if(door.getRed()==color[0] && door.getGreen()==color[1] && door.getBlue()==color[2]){
-                        player.setPos(i*64+32,j*64+32);
                 }else if(isExit(color[0],color[1],color[2])){
-                    addDoor(i,j,color);
-                    walls[i][j]=5;
-                    LevelMaster.w.put(5, wall[i][j]);
-                    exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j]));
+                    addDoor(i,j,color,player);
+//                    walls[i][j]=5;
+//                    LevelMaster.w.put(5, wall[i][j]);
+//                    exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j]));
                 }
                 else{
                     walls[i][j]=0;
@@ -155,10 +153,10 @@ public class Level {
                     //sets the player's position to the current cell
                     player.setPos(i*64+32,j*64+32);
                 }else if(isExit(color[0],color[1],color[2])){
-                    addDoor(i,j,color);
-                    walls[i][j]=5;
-                    LevelMaster.w.put(5, wall[i][j]);
-                    exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j]));
+                    addDoor(i,j,color,player);
+//                    walls[i][j]=5;
+//                    LevelMaster.w.put(5, wall[i][j]);
+//                    exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j]));
                 }
                 else{
                     walls[i][j]=0;
@@ -214,7 +212,12 @@ public class Level {
         }
     }
     
-    public void addDoor(int i, int j, int[] color){
+    public void addDoor(int i, int j, int[] color, Player p){
+        Color c=new Color(color[0], color[1], color[2]);
+        exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j]));
+        if(LevelMaster.exits.get(c).equals(p.lastArea)){
+            p.setPos(i*64+32,j*64+32);
+        }
         if(color[0]==128 && color[1]==60 && color[2]==60){
             walls[i][j]=5;
             LevelMaster.w.put(5, wall[i][j]);

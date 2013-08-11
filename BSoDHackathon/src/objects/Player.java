@@ -6,6 +6,7 @@ package objects;
 
 import Utilities.ImageCollection;
 import Utilities.Vector2;
+import level.Exit;
 import level.Level;
 
 
@@ -27,6 +28,9 @@ public class Player {
     double bob;
     boolean moving;
     boolean isAttacking;
+    
+    public String lastArea="";
+    public boolean justComeThrough;
     
     MeleeWeapon mw;
     
@@ -146,6 +150,10 @@ public class Player {
     
     public boolean isAttacking(){
         return isAttacking();
+    }
+    
+    public void exitLevel(Exit e){
+        this.lastArea=new String(e.nextPlace());
     }
     
 }

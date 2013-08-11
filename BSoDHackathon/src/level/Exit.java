@@ -34,9 +34,16 @@ public class Exit {
         this.c=c;
     }
     
+    public String nextPlace(){
+        return next;
+    }
+    
     public void update(Player p, Main game){
-        if(AMath.distance(pos, p.pos) < 100){
+        if(AMath.distance(pos, p.pos) < 100 && !p.justComeThrough){
             game.giveNextLevel(next(p,game.isRebellionHappening));
+            p.exitLevel(this);
+        }else{
+            p.justComeThrough=false;
         }
     }
     
@@ -44,9 +51,9 @@ public class Exit {
         try {
             System.out.println(next);
             if(rebel){
-                return new Level("Resources/Dungeons/"+next.concat("2.png"), p, new ArrayList<Sprite>());
+                return new Level(true,"Resources/Dungeons/"+next.concat("2.png"), p, new ArrayList<Sprite>());
             }else{
-                return new Level("Resources/Dungeons/"+next.concat(".png"), p, new ArrayList<Sprite>());
+                return new Level(true,"Resources/Dungeons/"+next.concat(".png"), p, new ArrayList<Sprite>());
             }
         } catch (IOException ex) {
             Logger.getLogger(Exit.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);

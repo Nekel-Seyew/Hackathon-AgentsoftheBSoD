@@ -1,11 +1,11 @@
-$Train={
+$train={
     @Train.png;
     &Train2.png;
     #Exit:{->market,128,60,60,@door.png}
     #Exit:{->nilfheim,128,10,60,@door.png}
 }
 
-$Market={
+$market={
     @Market.png;
     &Market2.png;
     #Exit:{->train,60,10,60,@door.png}
@@ -18,51 +18,51 @@ $Market={
     #Exit:{->asgard,100,100,100,@door.png}
 }
 
-$Nilfheim={
+$nilfheim={
     @Nilfheim.png;
     &Nilfheim2.png;
     #Exit:{->train,60,10,60,@door.png}
 }
 
-$Midgard={
+$midgard={
     @Midgard.png;
     &Midgard2.png;
     #Exit:{->market,128,60,60,@door.png}
 }
 
-$Hel={
+$hel={
     @Hel.png;
     &Hel2.png;
     #Exit:{->market,128,60,60,@door.png}
 }
 
-$Vanaheim={
+$vanaheim={
     @Vanaheim.png;
     &Vanaheim2.png;
     #Exit:{->market,128,60,60,@door.png}
 }
 
-$Muspellsheim={
+$muspellsheim={
     @Muspellsheim.png;
     &Vanaheim2.png;
     #Exit:{->market,128,60,60,@door.png}
 }
 
-$Homes={
+$homes={
     @Homes.png;
     &Homes2.png;
     #Exit:{->market,128,60,60,@door.png}
     #Exit:{->svartalfheim,255,5,5,@door.png}
 }
 
-$Svartalfheim={
+$svartalfheim={
     @Svartalfheim.png;
     &Svartalfheim2.png;
     #Exit:{->homes,128,234,126,@door.png}
     #Exit:{->market,128,60,60,@door.png}
 }
 
-$Asgard={
+$asgard={
     @Asgard.png
     &Asgard2.png;
     #Exit:{->market,128,60,60,@door.png}

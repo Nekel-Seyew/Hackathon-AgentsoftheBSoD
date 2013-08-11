@@ -73,9 +73,6 @@ public class Camera {
         brick2 = new Image2D[rayCount];
         stone = new Image2D[rayCount];
         metal = new Image2D[rayCount];
-        elderfloors = new Image2D[]{new Image2D("src/Resources/lol elder scrolls 1.png"),
-            new Image2D("src/Resources/lol elder scrolls 2.png"),
-            new Image2D("src/Resources/lol elder scrolls 3.png")};
         floorindex = 0;
         for (int i = 0; i < rayCount; i++) {
             rays[i] = -1;
@@ -340,10 +337,8 @@ public class Camera {
         }else{
             Color a=LevelMaster.w.get(tex);
             Image2D[] w= LevelMaster.walls.get(a);
-            if(w==null){
-                
-            }
             try{
+                
                 batch.Draw(w[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
             }catch(Exception e){
                 e.printStackTrace();
