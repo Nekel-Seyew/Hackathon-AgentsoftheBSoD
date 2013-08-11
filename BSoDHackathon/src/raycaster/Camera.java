@@ -341,10 +341,14 @@ public class Camera {
             Color a=LevelMaster.w.get(tex);
             Image2D[] w= LevelMaster.walls.get(a);
             if(w==null){
-                int g=0;
+                
             }
-            batch.Draw(w[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
-        }
+            try{
+                batch.Draw(w[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+         }
         
 //        switch (tex) {
 //            case 1:
