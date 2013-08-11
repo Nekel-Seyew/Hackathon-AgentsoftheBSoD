@@ -4,12 +4,14 @@
  */
 package raycaster;
 
+import Advance.AMath;
 import Utilities.Image2D;
 import Utilities.ImageCollection;
 import Utilities.Rect;
 import Utilities.Vector2;
 import java.awt.Color;
 import java.awt.Rectangle;
+import level.Exit;
 import level.Level;
 import level.LevelMaster;
 import objects.Player;
@@ -177,6 +179,7 @@ public class Camera {
             //dist = Math.sqrt((x - X) * (x - X) + (y - Y) * (y - Y));
             if ((cell(x, y + dy / 2) > 0)) {
                 mindist = Math.sqrt((x - X) * (x - X) + (y - Y) * (y - Y)) + 1;
+//                mindist=AMath.distance(new Vector2(x,y), new Vector2(X,Y));
             } else {
                 done = false;
                 if (dy > 0) {
@@ -189,6 +192,7 @@ public class Camera {
                     x += dx;
                     y += dy;
                     dist = Math.sqrt((x - X) * (x - X) + (y - Y) * (y - Y));
+//                    dist=AMath.distance(new Vector2(x,y), new Vector2(X,Y));
                     if ((cell(x, y + dy / 2) > 0) && !done) {
                         mindist = dist;
                         done = true;
@@ -210,16 +214,12 @@ public class Camera {
             x += dx;
             y += dy;
             dist = Math.sqrt((x - X) * (x - X) + (y - Y) * (y - Y));
+//            dist=AMath.distance(new Vector2(x,y), new Vector2(X,Y));
 
             if (cell(x + dx / 2, y) > 0 && dist <= mindist) {
                 //rayTexs[i]=cell(x+dx/2,y);
                 rayHeight = (sf / (dist * Math.cos(angleOffset)));
-                if (!textures) {
-                    rect = new Rect(new Vector2(screenX - xStep / 2, screenHeight / 2 - rayHeight / 2), (int) xStep, (int) rayHeight);
-                    fillRect(batch, rect, getCol(cell(x + dx / 2, y), dist, false), (int) rayHeight + 1000);
-                } else {
                     drawTex(batch, i, cell(x + dx / 2, y), screenX, screenHeight / 2, x + y, rayHeight, false);
-                }
                 mindist = dist;
             } else {
                 done = false;
@@ -233,17 +233,13 @@ public class Camera {
                     x += dx;
                     y += dy;
                     dist = Math.sqrt((x - X) * (x - X) + (y - Y) * (y - Y));
+//                    dist=AMath.distance(new Vector2(x,y), new Vector2(X,Y));;
                     if (dist > mindist) {
                         done = true;
                     }
                     if (cell(x + dx / 2, y) > 0 && !done) {
                         rayHeight = (sf / (dist * Math.cos(angleOffset)));
-                        if (!textures) {
-                            rect = new Rect(new Vector2(screenX - xStep / 2, screenHeight / 2 - rayHeight / 2), (int) xStep, (int) rayHeight);
-                            fillRect(batch, rect, getCol(cell(x + dx / 2, y), dist, false), (int) rayHeight + 1000);
-                        } else {
                             drawTex(batch, i, cell(x + dx / 2, y), screenX, screenHeight / 2, x + y, rayHeight, false);
-                        }
                         mindist = dist;
                         done = true;
                     } else if (!done && dist < 2000) {
@@ -267,17 +263,13 @@ public class Camera {
             x += dx;
             y += dy;
             dist = Math.sqrt((x - X) * (x - X) + (y - Y) * (y - Y));
+//            dist=AMath.distance(new Vector2(x,y), new Vector2(X,Y));
             if ((cell(x, y + dy / 2) > 0)) {
                 //dist = Math.sqrt((x - X) * (x - X) + (y - Y) * (y - Y));
                 if (dist < mindist) {
 
                     rayHeight = (sf / (dist * Math.cos(angleOffset)));
-                    if (!textures) {
-                        rect = new Rect(new Vector2(screenX - xStep / 2, screenHeight / 2 - rayHeight / 2), (int) xStep, (int) rayHeight);
-                        fillRect(batch, rect, getCol(cell(x, y + dy / 2), dist, true), (int) rayHeight + 1000);
-                    } else {
                         drawTex(batch, i, cell(x, y + dy / 2), screenX, screenHeight / 2, x + y, rayHeight, true);
-                    }
                 }
             } else {
                 done = false;
@@ -291,17 +283,14 @@ public class Camera {
                     x += dx;
                     y += dy;
                     dist = Math.sqrt((x - X) * (x - X) + (y - Y) * (y - Y));
+//                    dist=AMath.distance(new Vector2(x,y), new Vector2(X,Y));
                     if (dist > mindist) {
                         done = true;
                     }
                     if ((cell(x, y + dy / 2) > 0) && !done) {
                         rayHeight = (sf / (dist * Math.cos(angleOffset)));
-                        if (!textures) {
-                            rect = new Rect(new Vector2(screenX - xStep / 2, screenHeight / 2 - rayHeight / 2), (int) xStep, (int) rayHeight);
-                            fillRect(batch, rect, getCol(cell(x, y + dy / 2), dist, true), (int) rayHeight + 1000);
-                        } else {
+
                             drawTex(batch, i, cell(x, y + dy / 2), screenX, screenHeight / 2, x + y, rayHeight, true);
-                        }
                         done = true;
                     } else if (!done && dist < 2000) {
                         rayHeight = (sf / (dist * Math.cos(angleOffset)));
@@ -337,12 +326,7 @@ public class Camera {
         }else{
             Color a=LevelMaster.w.get(tex);
             Image2D[] w= LevelMaster.walls.get(a);
-            try{
-                
-                batch.Draw(w[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+            batch.Draw(w[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
          }
         
 //        switch (tex) {

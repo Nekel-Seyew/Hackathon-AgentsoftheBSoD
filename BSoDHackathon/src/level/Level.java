@@ -24,81 +24,18 @@ import raycaster.Main;
  * @author pcowal15
  */
 public class Level {
+    public static Level inst;
+    
     Color[][] wall;
     int[][] walls;//I'm representing the walls as integers here, with the integers corresponding to textures/colors
     double cellSize=64;//The cells in the game are 64 by 64, as are the wall textures.
     
-    ArrayList<Exit> exits;
+    public ArrayList<Exit> exits;
     ArrayList<Sprite> sprites;
     
-    public Level(boolean door, String map,Player player,ArrayList<Sprite>objects) throws IOException{
-        exits=new ArrayList<>();
-        sprites=objects;
-        //This code draws an image to a graphics thingy and gets the BufferedImage off of it
-        BufferedImage mapImage = ImageIO.read(new File(map));
-        int type = mapImage.getType();
-        if(type!=BufferedImage.TYPE_INT_RGB){
-            BufferedImage tempImage= new BufferedImage(mapImage.getWidth(),mapImage.getHeight(),BufferedImage.TYPE_INT_RGB);
-            Graphics g = tempImage.createGraphics();
-            g.drawImage(mapImage,0,0,null);
-            g.dispose();
-            mapImage=tempImage;
-        }
-        //Initializes the walls array
-        walls=new int[mapImage.getWidth()][mapImage.getHeight()];
-        wall=new Color[mapImage.getWidth()][mapImage.getHeight()];
-        int[] color=new int[3];
-        //The following loop parses through the buffered image, checking the colors
-        for(int i=0; i<mapImage.getWidth(); i++){
-            for(int j=0; j<mapImage.getHeight(); j++){
-                mapImage.getRaster().getPixel(i, j, color);
-                wall[i][j]=new Color(color[0], color[1],color[2]);
-                //depending on the color, it sets the wall value and/or adds an object
-                if (color[0]==0 && color[1]==0 && color[2]==0){
-                    walls[i][j]=1;//probably brick
-                    LevelMaster.w.put(1, wall[i][j]);
-                }     
-                else if (color[0]==128 && color[1]==0 && color[2]==0){
-                    walls[i][j]=2;//metal
-                    LevelMaster.w.put(2, wall[i][j]);
-                }
-                else if (color[0]==0 && color[1]==128 && color[2]==0){
-                    walls[i][j]=3;//another metal
-                    LevelMaster.w.put(3, wall[i][j]);
-                }
-                else if (color[0]==0 && color[1]==0 && color[2]==128){
-                    walls[i][j]=4;//I'm not even sure
-                    LevelMaster.w.put(4, wall[i][j]);
-                }    
-                else if (color[0]==255 && color[1]==0 && color[2]==0){
-                    walls[i][j]=0;//blank spot
-                    //adds a pixelated column
-                    objects.add(new Pillar(new Vector2(i*64+32,j*64+32)));
-                }
-                else if (color[0]==0 && color[1]==255 && color[2]==0){
-                    walls[i][j]=0;//another blank spot
-                }
-                else if (color[0]==0 && color[1]==0 && color[2]==255){
-                    walls[i][j]=0;//blank spot
-                }
-                else if (color[0]==255 && color[1]==255 && color[2]==0){
-                    walls[i][j]=0;//blank spot
-                    //sets the player's position to the current cell
-//                    player.setPos(i*64+32,j*64+32);
-                }else if(isExit(color[0],color[1],color[2])){
-                    addDoor(i,j,color,player);
-//                    walls[i][j]=5;
-//                    LevelMaster.w.put(5, wall[i][j]);
-//                    exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j]));
-                }
-                else{
-                    walls[i][j]=0;
-                }
-            }
-        }
-    }
     
     public Level(String map,Player player,ArrayList<Sprite>objects) throws IOException{
+        inst=this;
         exits=new ArrayList<>();
         sprites=objects;
         //This code draws an image to a graphics thingy and gets the BufferedImage off of it
@@ -136,7 +73,41 @@ public class Level {
                 else if (color[0]==0 && color[1]==0 && color[2]==128){
                     walls[i][j]=4;//I'm not even sure
                     LevelMaster.w.put(4, wall[i][j]);
-                }    
+                }else if(color[0]==200 && color[1]==200 && color[2]==200){
+                    walls[i][j]=15;
+                    LevelMaster.w.put(15, wall[i][j]);
+                }else if(color[0]==100 && color[1]==100 && color[2]==100){
+                    walls[i][j]=16;
+                    LevelMaster.w.put(16, wall[i][j]);
+                }else if(color[0]==100 && color[1]==50 && color[2]==25){
+                    walls[i][j]=17;
+                    LevelMaster.w.put(17, wall[i][j]);
+                }else if(color[0]==150 && color[1]==150 && color[2]==150){
+                    walls[i][j]=18;
+                    LevelMaster.w.put(18, wall[i][j]);
+                }else if(colorEqual(color, new Color(200,200,0))){
+                    walls[i][j]=19;
+                    LevelMaster.w.put(19, wall[i][j]);
+                }else if(colorEqual(color, new Color(255,1,1))){
+                    walls[i][j]=20;
+                    LevelMaster.w.put(20, wall[i][j]);
+                }else if(colorEqual(color, new Color(127,127,127))){
+                    walls[i][j]=22;
+                    LevelMaster.w.put(22, wall[i][j]);
+                }
+                else if(colorEqual(color, new Color(100,234,123))){
+                    walls[i][j]=23;
+                    LevelMaster.w.put(23, wall[i][j]);
+                }else if(colorEqual(color, new Color(0,20,255))){
+                    walls[i][j]=24;
+                    LevelMaster.w.put(24, wall[i][j]);
+                }else if(colorEqual(color, new Color(20,20,20))){
+                    walls[i][j]=25;
+                    LevelMaster.w.put(25, wall[i][j]);
+                }else if(colorEqual(color, new Color(100,25,50))){
+                    walls[i][j]=26;
+                    LevelMaster.w.put(26, wall[i][j]);
+                }
                 else if (color[0]==255 && color[1]==0 && color[2]==0){
                     walls[i][j]=0;//blank spot
                     //adds a pixelated column
@@ -153,7 +124,7 @@ public class Level {
                     //sets the player's position to the current cell
                     player.setPos(i*64+32,j*64+32);
                 }else if(isExit(color[0],color[1],color[2])){
-                    addDoor(i,j,color,player);
+                    addDoor(i,j,color,player,map);
 //                    walls[i][j]=5;
 //                    LevelMaster.w.put(5, wall[i][j]);
 //                    exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j]));
@@ -212,12 +183,10 @@ public class Level {
         }
     }
     
-    public void addDoor(int i, int j, int[] color, Player p){
+    public void addDoor(int i, int j, int[] color, Player p, String s){
         Color c=new Color(color[0], color[1], color[2]);
-        exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j]));
-        if(LevelMaster.exits.get(c).equals(p.lastArea)){
-            p.setPos(i*64+32,j*64+32);
-        }
+        Color player=new Color(255,255,0);
+        exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j],s));
         if(color[0]==128 && color[1]==60 && color[2]==60){
             walls[i][j]=5;
             LevelMaster.w.put(5, wall[i][j]);
@@ -245,7 +214,7 @@ public class Level {
         }else if(color[0]==255 && color[1]==5 && color[2]==5){
             walls[i][j]=13;
             LevelMaster.w.put(13, wall[i][j]);
-        }else if(color[0]==100 && color[1]==100 && color[2]==100){
+        }else if(color[0]==101 && color[1]==101 && color[2]==101){
             walls[i][j]=14;
             LevelMaster.w.put(14, wall[i][j]);
         }
@@ -253,5 +222,9 @@ public class Level {
     
     public boolean isExit(int r, int g, int b){
         return LevelMaster.isExit(new Color(r,g,b));
+    }
+    
+    public boolean colorEqual(int[] color, Color c){
+        return color[0]==c.getRed() && color[1]==c.getGreen() && color[2]==c.getBlue();
     }
 }

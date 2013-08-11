@@ -5,5 +5,12 @@
 #Wall:{0,0,128,@metal.png}
 #Wall:{200,200,200,@tombstone1.png}
 #Wall:{100,100,100,@tombstone2.png}
-#Wall:{100,50,25,@bench.png}
+#Wall:{100,50,25,@shop_windows.png}
 #Wall:{150,150,150,@frostwall.png}
+#Wall:{200,200,0,@wheat.png}
+#Wall:{255,1,1,@bricks_stained_glass.png}
+#Wall:{127,127,127,@bricks2.png}
+#Wall:{100,234,123,@poster_burnt.png}
+#Wall:{0,20,255,@tube_computer.png}
+#Wall:{20,20,20,@tubewalls.png}
+#Wall:{100,25,50,@shop_door.png}

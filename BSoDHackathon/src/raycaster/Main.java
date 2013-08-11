@@ -5,7 +5,10 @@
 package raycaster;
 
 import Hardware_Accelerated.AGame;
+import MenuAndStory.Menu;
 import Utilities.Animation;
+import Utilities.FontStyle;
+import Utilities.FontType;
 import Utilities.ImageCollection;
 import Utilities.KeyBoard;
 import Utilities.Rect;
@@ -41,15 +44,24 @@ public class Main extends AGame{
     long startTimer;
     SoundFile startSound;
     
+    Menu menu;
+    
 
     @Override
     public void InitializeAndLoad() {
+        menu=new Menu();
+        isStart=true;
+        begin=new Animation(71,0,new Vector2(400,300),250);
+        startTimer=System.currentTimeMillis();
+        startSound=new SoundFile("Resources/Sound/long_sound_1.wav",0);
+        new Thread(new makeIntro()).start();
+        
         isRebellionHappening=false;
         player=new Player(500,500,0);
         LevelMaster.makeExists();
         sprites=new ArrayList<Sprite>();
         try {
-            level=new Level("Resources/Dungeons/Train.png",player,sprites);
+            level=new Level("Resources/Dungeons/train.png",player,sprites);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
@@ -76,7 +88,7 @@ public class Main extends AGame{
 
     @Override
     public void Update() {
-        if (!isStart) {
+        if (!isStart && menu.exitMenu) {
             player.update(level);
             //player movement
             if (keyboard.isKeyDown('w') || keyboard.isKeyDown(KeyEvent.VK_UP) || keyboard.isKeyDown(KeyBoard.Eight)) {
@@ -112,9 +124,17 @@ public class Main extends AGame{
                 camera.setFOV(camera.fov + (Math.PI / 4 - camera.fov) * 0.1);
                 player.setDirSpeed(Math.PI / 90);
             }
+            
+            if(keyboard.isKeyDown('m')){
+                menu.start();
+            }
+            
             camera.setZ(player.getZ(), 0);
             level.update(player, this);
-        }else{
+        }else if(!menu.exitMenu){
+            menu.Update(keyboard);
+        }
+        else{
             if(keyboard.isKeyDown(KeyEvent.VK_SPACE)){
                 isStart=false;
                 if(startSound.isAlive()){
@@ -130,13 +150,21 @@ public class Main extends AGame{
     @Override
     public void Draw(Graphics2D g, ImageCollection batch) {
         if (!isStart) {
+            if(!menu.exitMenu){
+                menu.Draw(batch);
+            }
             player.Draw(batch);
             camera.castRays(batch, player.getX(), player.getY(), player.getDir());
             if (sprites != null) {
                 for (Sprite o : sprites) {
                     camera.drawImage(batch, level, player, o.sprite(), o.x(), o.y(), true);
                 }
-
+            }
+            if (menu.exitMenu) {
+                batch.DrawString(new Vector2(680, 20), "M for Menu", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
+                batch.DrawString(new Vector2(680, 35), "WASD to Move", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
+                batch.DrawString(new Vector2(680, 50), "Arrows to Turn", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
+                batch.DrawString(new Vector2(680, 65), "E to Swing Sword", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
             }
         }else{
             if(System.currentTimeMillis()-startTimer >= 15500){
@@ -173,6 +201,12 @@ public class Main extends AGame{
             }catch(Exception e){
                 System.out.println(path+"/"+i+".png");
             }
+        }
+    }
+    
+    private class makeIntro implements Runnable{
+        public void run(){
+            makeIntro();
         }
     }
     
