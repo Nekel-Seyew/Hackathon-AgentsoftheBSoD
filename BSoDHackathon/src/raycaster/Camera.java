@@ -11,6 +11,7 @@ import Utilities.Vector2;
 import java.awt.Color;
 import java.awt.Rectangle;
 import level.Level;
+import level.LevelMaster;
 import objects.Player;
 
 /**
@@ -144,19 +145,6 @@ public class Camera {
         if (elderscrolls) {
             batch.Draw(elderfloors[(int) Math.floor(floorindex)], new Vector2(screenWidth / 2, screenHeight), 0, (int) screenWidth / 128, (int) screenHeight / 64, 2);
         }
-        /*
-        //trying to get the Raycasting code to be split into two... oh well
-        int half=rayCount/2;
-        CameraHelper A=new CameraHelper(0, half,  X,  Y, textures,  sf,  batch, angleOffset,  angleStep,  screenX,  xStep,screenHeight,angle);
-        CameraHelper B=new CameraHelper(half-1, rayCount,  X,  Y, textures,  sf,  batch, angleOffset,  angleStep,  screenX,  xStep,screenHeight,angle);
-        
-        Thread tA=new Thread(A);
-        Thread tB=new Thread(B);
-        synchronized(this){
-            tA.start();
-            tB.start();
-        }
-        */
         
         //This is a raycasting algorithm.  Email me if you have any questions, I don't feel like commenting it all...
         for (int i = 0; i < rayCount; i++) {
@@ -347,28 +335,40 @@ public class Camera {
     public void drawTex(ImageCollection batch, int i, int tex, double x, double y, double offset, double depth, boolean horizontal) {
         Rect part = new Rect(new Vector2(offset % cellSize, 0), 1, 64);
         y += zoffset * depth + zangle;
-        switch (tex) {
-            case 1:
-                if (horizontal) {
-                    batch.Draw(brick[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
-                } else {
-                    batch.Draw(brick2[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
-                }
-                break;
-            case 2:
-                batch.Draw(stone[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
-                break;
-            case 4:
-                batch.Draw(metal[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
-                break;
-            default:
-                if (horizontal) {
-                    batch.Draw(brick[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
-                } else {
-                    batch.Draw(brick2[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
-                }
-                break;
+        if(tex==0){
+            return;
+        }else{
+            Color a=LevelMaster.w.get(tex);
+            Image2D[] w= LevelMaster.walls.get(a);
+            if(w==null){
+                int g=0;
+            }
+            
+            batch.Draw(w[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
         }
+        
+//        switch (tex) {
+//            case 1:
+//                if (horizontal) {
+//                    batch.Draw(brick[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
+//                } else {
+//                    batch.Draw(brick2[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
+//                }
+//                break;
+//            case 2:
+//                batch.Draw(stone[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
+//                break;
+//            case 4:
+//                batch.Draw(metal[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
+//                break;
+//            default:
+//                if (horizontal) {
+//                    batch.Draw(brick[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
+//                } else {
+//                    batch.Draw(brick2[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
+//                }
+//                break;
+//        }
 
     }
     //just another alternate method of drawing a rectangle

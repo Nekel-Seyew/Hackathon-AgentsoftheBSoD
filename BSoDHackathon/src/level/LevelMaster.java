@@ -7,6 +7,7 @@ package level;
 import Utilities.Image2D;
 import java.awt.Color;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;
@@ -20,6 +21,7 @@ public class LevelMaster {
     public static Hashtable<Color, String> exits=new Hashtable<Color, String>();
     
     public static Hashtable<Color, Image2D[]> walls=new Hashtable<Color, Image2D[]>();
+    public static Hashtable<Integer, Color> w=new Hashtable<>();
     
     static String a;
     static String aa;
@@ -72,17 +74,20 @@ public class LevelMaster {
                     }else{
                         rgb=new Color(r,g,b);
                     }
-                    Image2D[] w=new Image2D[Camera.rayCount];
+                    Image2D[] w2=new Image2D[Camera.rayCount];
                     for(int i=0; i<Camera.rayCount; i++){
-                        w[i]=new Image2D("Resources/Sprites/Walls/"+next);
+                        aaa="Resources/Sprites/Walls/"+next;
+                        w2[i]=new Image2D("Resources/Sprites/Walls/"+next);
                     }
-                    walls.put(rgb, w);
+                    walls.put(rgb, w2);
                 }
             }
         }catch(Exception e){
             e.printStackTrace();
         }
     }
+    
+    
     
     public static void make(){
         makeExists();

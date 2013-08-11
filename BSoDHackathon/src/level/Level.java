@@ -49,15 +49,19 @@ public class Level {
                 //depending on the color, it sets the wall value and/or adds an object
                 if (color[0]==0 && color[1]==0 && color[2]==0){
                     walls[i][j]=1;//probably brick
+                    LevelMaster.w.put(1, wall[i][j]);
                 }     
                 else if (color[0]==128 && color[1]==0 && color[2]==0){
                     walls[i][j]=2;//metal
+                    LevelMaster.w.put(2, wall[i][j]);
                 }
                 else if (color[0]==0 && color[1]==128 && color[2]==0){
                     walls[i][j]=3;//another metal
+                    LevelMaster.w.put(3, wall[i][j]);
                 }
                 else if (color[0]==0 && color[1]==0 && color[2]==128){
                     walls[i][j]=4;//I'm not even sure
+                    LevelMaster.w.put(4, wall[i][j]);
                 }    
                 else if (color[0]==255 && color[1]==0 && color[2]==0){
                     walls[i][j]=0;//blank spot
@@ -75,7 +79,7 @@ public class Level {
                     //sets the player's position to the current cell
                     player.setPos(i*64+32,j*64+32);
                 }else if(isExit(color[0],color[1],color[2])){
-                    
+                    LevelMaster.w.put(5, wall[i][j]);
                 }
                 else{
                     walls[i][j]=0;
