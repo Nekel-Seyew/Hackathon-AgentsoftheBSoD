@@ -47,9 +47,8 @@ public class Main extends AGame{
         //camera=new Camera(Math.PI/4,1279,640,480); //MAX RAY COUNT
         camera.setLevel(level.getWalls()); //
         particles=new ParticleManager(Color.BLUE,-0.1,0.5,0,false,300);//color,gravity,bounciness,air resistance,stickiness,lifetime
-        player.setLevel(level.getWalls());
         this.setBackgroundColor(Color.BLACK);
-        LevelMaster.makeExists();
+        LevelMaster.make();
     }
 
     @Override
@@ -81,6 +80,9 @@ public class Main extends AGame{
         if(keyboard.isKeyDown('d')){
             player.moveRight(level);
         }
+        if(keyboard.isKeyDown('e')){
+            player.swingSword();
+        }
         camera.screwFloor(player.speed()/10);
         
         //scope
@@ -99,6 +101,7 @@ public class Main extends AGame{
 
     @Override
     public void Draw(Graphics2D g, ImageCollection batch) {
+        player.Draw(batch);
         camera.castRays(batch, player.getX(), player.getY(), player.getDir());
         if (sprites!=null){
             for(Sprite o:sprites){
@@ -116,7 +119,6 @@ public class Main extends AGame{
     public void giveNextLevel(Level l){
         this.level=l;
         camera.setLevel(l.getWalls());
-        player.setLevel(l.getWalls());
     }
     
     public boolean isRebellionHappening(){

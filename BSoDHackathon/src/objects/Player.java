@@ -4,6 +4,7 @@
  */
 package objects;
 
+import Utilities.ImageCollection;
 import Utilities.Vector2;
 import level.Level;
 
@@ -22,10 +23,13 @@ public class Player {
     double cellSize;
     double z;
     double zdirection;
-    int[][] level;
     double radius=3;
     double bob;
     boolean moving;
+    boolean isAttacking;
+    
+    MeleeWeapon mw;
+    
     public Player(double x, double y, double angle){
         pos=new Vector2(x,y);
         direction=angle;
@@ -37,12 +41,11 @@ public class Player {
         z=32;
         bob=0;
         moving=false;
+        mw=new MeleeWeapon("Resources/Sprites/sword.png");
+        isAttacking=false;
     }
     public double speed(){
         return Math.sqrt(hspeed*hspeed+vspeed*vspeed);
-    }
-    public void setLevel(int[][] Level){
-        level=Level;
     }
     public void turnLeft(){
         direction+=dirspeed;
@@ -79,6 +82,7 @@ public class Player {
         dY(-hspeed*Math.sin(direction-Math.PI/2),level);
         bob+=0.25;
         moving=false;
+        mw.update();
     }
     public void setDirSpeed(double dirSpeed){
         dirspeed=dirSpeed;
@@ -130,14 +134,18 @@ public class Player {
     public void setPos(double x,double y){
         pos=new Vector2(x,y);
     }
-    public int cell(double X, double Y) {
-        int cellX = (int) Math.floor(X / cellSize);
-        int cellY = (int) Math.floor(Y / cellSize);
-        try{
-            return level[cellX][cellY];
-        }
-        catch(Exception e){
-            return 1;
-        }
+    
+    public void swingSword(){
+        mw.attack();
+        isAttacking=true;
     }
+    
+    public void Draw(ImageCollection batch){
+        mw.Draw(batch);
+    }
+    
+    public boolean isAttacking(){
+        return isAttacking();
+    }
+    
 }
