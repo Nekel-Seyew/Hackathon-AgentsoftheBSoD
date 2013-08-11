@@ -47,9 +47,14 @@ public class Main extends AGame{
     Menu menu;
     String currentLocation="train";
     
+    boolean hasWon;
+    boolean isDead;
+    
 
     @Override
     public void InitializeAndLoad() {
+        hasWon=false;
+        isDead=false;
         menu=new Menu();
         isStart=true;
         begin=new Animation(71,0,new Vector2(400,300),250);
@@ -89,7 +94,7 @@ public class Main extends AGame{
 
     @Override
     public void Update() {
-        if (!isStart && menu.exitMenu) {
+        if ((!isStart && menu.exitMenu) && (!isDead || !hasWon)) {
             player.update(level);
             //player movement
             if (keyboard.isKeyDown('w') || keyboard.isKeyDown(KeyEvent.VK_UP) || keyboard.isKeyDown(KeyBoard.Eight)) {
@@ -132,6 +137,14 @@ public class Main extends AGame{
             
             camera.setZ(player.getZ(), 0);
             level.update(player, this);
+            
+            if(player.hasWon()){
+                this.hasWon=true;
+            }
+            if(player.getHelath() < -10){
+                this.isDead=true;
+            }
+            
         }else if(!menu.exitMenu){
             menu.Update(keyboard,player);
         }
@@ -150,7 +163,7 @@ public class Main extends AGame{
 
     @Override
     public void Draw(Graphics2D g, ImageCollection batch) {
-        if (!isStart) {
+        if (!isStart && (!isDead || !hasWon)) {
             if(!menu.exitMenu){
                 menu.Draw(batch);
             }
@@ -170,6 +183,14 @@ public class Main extends AGame{
                 batch.DrawString(new Vector2(20, 500), "Current Location: "+this.currentLocation, Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
                 batch.DrawString(new Vector2(20, 515), "Health: "+this.player.getHelath(), Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
             }
+        }else if(isDead){
+            batch.drawRect(new Vector2(0,0), 800, 600, Color.black, 1000);
+            batch.DrawString(new Vector2(200, 200), "YOU'RE DEAD", Color.red, 10000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
+        }else if(hasWon){
+            batch.drawRect(new Vector2(0,0), 800, 600, Color.black, 1000);
+            batch.DrawString(new Vector2(200, 200), "SUCCESS", Color.white, 10000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
+            batch.DrawString(new Vector2(200, 300), "After gaining all the data, I'm going to share this with the world.", Color.white, 10000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
+            batch.DrawString(new Vector2(200, 315), "The World Needs hope afterall", Color.white, 10000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
         }else{
             if(System.currentTimeMillis()-startTimer >= 15500){
                 isStart=false;
