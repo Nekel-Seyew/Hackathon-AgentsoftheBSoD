@@ -23,7 +23,7 @@ import objects.Sprite;
  * @author pcowal15
  */
 public class Level {
-    Color[] wall;
+    Color[][] wall;
     int[][] walls;//I'm representing the walls as integers here, with the integers corresponding to textures/colors
     double cellSize=64;//The cells in the game are 64 by 64, as are the wall textures.
     public Level(String map,Player player,ArrayList<Sprite>objects) throws IOException{
@@ -39,11 +39,13 @@ public class Level {
         }
         //Initializes the walls array
         walls=new int[mapImage.getWidth()][mapImage.getHeight()];
+        wall=new Color[mapImage.getWidth()][mapImage.getHeight()];
         int[] color=new int[3];
         //The following loop parses through the buffered image, checking the colors
         for(int i=0; i<mapImage.getWidth(); i++){
             for(int j=0; j<mapImage.getHeight(); j++){
                 mapImage.getRaster().getPixel(i, j, color);
+                wall[i][j]=new Color(color[0], color[1],color[2]);
                 //depending on the color, it sets the wall value and/or adds an object
                 if (color[0]==0 && color[1]==0 && color[2]==0){
                     walls[i][j]=1;//probably brick
@@ -85,22 +87,27 @@ public class Level {
         //returns the array
         return walls;
     }
+    
+    public Color[][] getWall(){
+        return wall;
+    }
+    
     public boolean rectCell(double x, double y, double r){
         //I think this computes whether or not the given square with sidelength 2r intersects with a wall
         return (wall(x,y)||wall(x-r,y)||wall(x+r,y)||wall(x,y-r)||wall(x,y+r)
                 ||wall(x-r,y-r)||wall(x+r,y+r)||wall(x+r,y-r)||wall(x-r,y+r));
     }
-    public int cell(double X, double Y) {
-        //returns the cell value at the cell containing the given point
-        int cellX = (int) Math.floor(X / cellSize);
-        int cellY = (int) Math.floor(Y / cellSize);
-        try{
-            return walls[cellX][cellY];
-        }
-        catch(Exception e){
-            return 1;
-        }
-    }
+//    public int cell(double X, double Y) {
+//        //returns the cell value at the cell containing the given point
+//        int cellX = (int) Math.floor(X / cellSize);
+//        int cellY = (int) Math.floor(Y / cellSize);
+//        try{
+//            return walls[cellX][cellY];
+//        }
+//        catch(Exception e){
+//            return 1;
+//        }
+//    }
     public boolean wall(double X, double Y) {
         //returns whether or not the cell value at the given point is greater than zero
         //i.e. is a solid wall

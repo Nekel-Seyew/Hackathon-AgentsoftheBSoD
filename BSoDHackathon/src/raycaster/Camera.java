@@ -23,7 +23,7 @@ public class Camera {
     //OH GOD THAT'S A LOT OF VARIABLES
 
     double fov;//the angle of the field of view.  Probably should be something like pi/3 or pi/4
-    int rayCount;//The number of rays, I think
+    public static int rayCount;//The number of rays, I think
     double[] rays;//The array containing the distances calculated, probably
     int[] rayTexs;//The array containing the detected texture integers established in the Level class
     Image2D[] rayImages;//Not used, I think
@@ -44,6 +44,7 @@ public class Camera {
     double angleOffset;//The angular offset 
     double angleStep;//The change in angle after a ray is finished
     int[][] level;//The array containing all of the texture integers
+//    Color[][] level;
     Image2D[] brick;//The image array containing all of the brick images
     Image2D[] brick2;//See above (this one's slightly darker)
     Image2D[] stone;//See above

@@ -22,7 +22,6 @@ public class Player {
     double cellSize;
     double z;
     double zdirection;
-    int[][] level;
     double radius=3;
     double bob;
     boolean moving;
@@ -40,9 +39,6 @@ public class Player {
     }
     public double speed(){
         return Math.sqrt(hspeed*hspeed+vspeed*vspeed);
-    }
-    public void setLevel(int[][] Level){
-        level=Level;
     }
     public void turnLeft(){
         direction+=dirspeed;
@@ -130,14 +126,7 @@ public class Player {
     public void setPos(double x,double y){
         pos=new Vector2(x,y);
     }
-    public int cell(double X, double Y) {
-        int cellX = (int) Math.floor(X / cellSize);
-        int cellY = (int) Math.floor(Y / cellSize);
-        try{
-            return level[cellX][cellY];
-        }
-        catch(Exception e){
-            return 1;
-        }
-    }
+    
+    
+    
 }
