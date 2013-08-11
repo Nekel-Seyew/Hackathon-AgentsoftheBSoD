@@ -45,6 +45,7 @@ public class Main extends AGame{
     SoundFile startSound;
     
     Menu menu;
+    String currentLocation="train";
     
 
     @Override
@@ -165,6 +166,7 @@ public class Main extends AGame{
                 batch.DrawString(new Vector2(680, 35), "WASD to Move", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
                 batch.DrawString(new Vector2(680, 50), "Arrows to Turn", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
                 batch.DrawString(new Vector2(680, 65), "E to Swing Sword", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
+                batch.DrawString(new Vector2(20, 500), "Current Location: "+this.currentLocation, Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
             }
         }else{
             if(System.currentTimeMillis()-startTimer >= 15500){
@@ -202,6 +204,10 @@ public class Main extends AGame{
                 System.out.println(path+"/"+i+".png");
             }
         }
+    }
+    
+    public void setLocation(String loc){
+        this.currentLocation=new String(loc);
     }
     
     private class makeIntro implements Runnable{

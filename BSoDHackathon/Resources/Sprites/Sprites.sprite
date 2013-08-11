@@ -1,3 +1,5 @@
 #NPC:{123,123,123,@Guy1Sprites};
 
 #Item:{22,22,22,@health.png};
+
+#Story:{32,32,0,@0};

@@ -4,8 +4,10 @@
  */
 package objects;
 
+import MenuAndStory.StoryJournal;
 import Utilities.ImageCollection;
 import Utilities.Vector2;
+import java.util.ArrayList;
 import level.Exit;
 import level.Level;
 
@@ -33,6 +35,7 @@ public class Player {
     public boolean justComeThrough;
     
     MeleeWeapon mw;
+    ArrayList<StoryJournal> entries;
     
     public Player(double x, double y, double angle){
         pos=new Vector2(x,y);
@@ -47,6 +50,7 @@ public class Player {
         moving=false;
         mw=new MeleeWeapon("Resources/Sprites/sword.png");
         isAttacking=false;
+        entries=new ArrayList<>();
     }
     public double speed(){
         return Math.sqrt(hspeed*hspeed+vspeed*vspeed);
@@ -154,6 +158,14 @@ public class Player {
     
     public void exitLevel(Exit e){
         this.lastArea=new String(e.nextPlace());
+    }
+    
+    public void giveEntry(StoryJournal sj){
+        entries.add(sj);
+    }
+    
+    public ArrayList<StoryJournal> getAllEntries(){
+        return entries;
     }
     
 }

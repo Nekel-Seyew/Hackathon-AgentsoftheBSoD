@@ -12,7 +12,7 @@ import Utilities.Vector2;
  * @author pcowal15
  */
 public abstract class Sprite {
-    Vector2 pos;
+    public Vector2 pos;
     Vector2 velocity;
     double direction;
     double speed;

@@ -94,8 +94,7 @@ public class Level {
                 }else if(colorEqual(color, new Color(127,127,127))){
                     walls[i][j]=22;
                     LevelMaster.w.put(22, wall[i][j]);
-                }
-                else if(colorEqual(color, new Color(100,234,123))){
+                }else if(colorEqual(color, new Color(100,234,123))){
                     walls[i][j]=23;
                     LevelMaster.w.put(23, wall[i][j]);
                 }else if(colorEqual(color, new Color(0,20,255))){
@@ -107,8 +106,13 @@ public class Level {
                 }else if(colorEqual(color, new Color(100,25,50))){
                     walls[i][j]=26;
                     LevelMaster.w.put(26, wall[i][j]);
-                }
-                else if (color[0]==255 && color[1]==0 && color[2]==0){
+                }else if(colorEqual(color, new Color(200,0,0))){
+                    walls[i][j]=27;
+                    LevelMaster.w.put(27, wall[i][j]);
+                }else if(colorEqual(color, new Color(32,45,54))){
+                    walls[i][j]=0;
+                    
+                } else if (color[0]==255 && color[1]==0 && color[2]==0){
                     walls[i][j]=0;//blank spot
                     //adds a pixelated column
                     objects.add(new Pillar(new Vector2(i*64+32,j*64+32)));

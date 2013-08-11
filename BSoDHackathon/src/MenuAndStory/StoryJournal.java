@@ -5,15 +5,17 @@
 package MenuAndStory;
 
 import Utilities.Image2D;
+import Utilities.Vector2;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+import objects.Sprite;
 
 /**
  *
  * @author RomulusAaron
  */
-public class StoryJournal {
+public class StoryJournal extends Sprite{
     public static ArrayList<StoryJournal>story=new ArrayList<>();
     
     Image2D sprite;
@@ -21,11 +23,14 @@ public class StoryJournal {
     int i;
     
     public StoryJournal(String s, int i){
+        super("Resources/Sprites/cd.png",new Vector2());
         sayings=new String(s);
         this.i=i;
     }
     
-    
+    public void givePos(Vector2 pos){
+        this.pos=pos;
+    }
     
     public static void makeStories(){
         try{

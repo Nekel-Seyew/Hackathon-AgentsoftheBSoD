@@ -26,6 +26,7 @@ public class LevelMaster {
     
     public static Hashtable<Color, String> items=new Hashtable<>();
     public static Hashtable<Color, String> NPC=new Hashtable<>();
+    public static Hashtable<Color, Integer> story=new Hashtable<>();
     
     static String a;
     static String aa;
@@ -128,18 +129,23 @@ public class LevelMaster {
                     Color rgb=new Color(r,g,b);
                     items.put(rgb, next);
                 }
+                else if(string.contains("#Story")){
+                    int next=Integer.parseInt(string.substring(string.indexOf("@")+1, string.indexOf('}')));
+                    String rS=string.substring(string.indexOf("{")+1);
+                    int r=Integer.parseInt(rS.substring(0, rS.indexOf(',')));
+                    String gS=rS.substring(rS.indexOf(',')+1);
+                    int g=Integer.parseInt(gS.substring(0, gS.indexOf(',')));
+                    String bS=gS.substring(gS.indexOf(',')+1);
+                    int b=Integer.parseInt(bS.substring(0, bS.indexOf(',')));
+                    Color rgb=new Color(r,g,b);
+                    story.put(rgb, next);
+                }
             }
         }catch(Exception e){
             e.printStackTrace();
         }
     }
     
-    
-    public static void make(){
-        makeExists();
-        makeWalls();
-        makeItemsAndNPC();
-    }
     
     public static boolean isExit(Color c) {
         return exits.containsKey(c);

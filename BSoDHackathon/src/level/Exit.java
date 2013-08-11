@@ -28,6 +28,7 @@ public class Exit {
     Vector2 pos;
     Color c;
     String now;
+    Main game;
     
     public Exit(String n, Vector2 pos, Color c, String now){
         next= new String(n);
@@ -41,6 +42,7 @@ public class Exit {
     }
     
     public void update(Player p, Main game){
+        this.game=game;
         if(AMath.distance(pos, p.pos) < 100){
             game.giveNextLevel(next(p,game.isRebellionHappening));
             p.exitLevel(this);
@@ -49,7 +51,7 @@ public class Exit {
     
     public Level next(Player p, boolean rebel){
         try {
-            System.out.println(next);
+            game.setLocation(next);
             if(rebel){
                 return new Level("Resources/Dungeons/"+next.concat("2.png"), p, new ArrayList<Sprite>());
             }else{
