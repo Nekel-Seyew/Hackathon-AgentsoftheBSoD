@@ -22,6 +22,8 @@ import raycaster.Main;
  * @author RomulusAaron
  */
 public class Exit {
+    
+    
     String next;
     Vector2 pos;
     Color c;
@@ -41,7 +43,7 @@ public class Exit {
     public Level next(Player p, boolean rebel){
         try {
             if(rebel){
-                return null; //TODO: custom code for each post-rebellion levels.
+                return new Level(next.concat("2.png"), p, new ArrayList<Sprite>());
             }else{
                 return new Level(next.concat(".png"), p, new ArrayList<Sprite>());
             }

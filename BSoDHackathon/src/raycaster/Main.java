@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import level.Level;
+import level.LevelMaster;
 import objects.ParticleManager;
 import objects.Player;
 import objects.Sprite;
@@ -48,6 +49,7 @@ public class Main extends AGame{
         particles=new ParticleManager(Color.BLUE,-0.1,0.5,0,false,300);//color,gravity,bounciness,air resistance,stickiness,lifetime
         player.setLevel(level.getWalls());
         this.setBackgroundColor(Color.BLACK);
+        LevelMaster.makeExists();
     }
 
     @Override

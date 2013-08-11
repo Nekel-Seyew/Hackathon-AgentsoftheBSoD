@@ -7,6 +7,7 @@ package level;
 import Utilities.Animation;
 import Utilities.Rect;
 import Utilities.Vector2;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -22,6 +23,7 @@ import objects.Sprite;
  * @author pcowal15
  */
 public class Level {
+    Color[] wall;
     int[][] walls;//I'm representing the walls as integers here, with the integers corresponding to textures/colors
     double cellSize=64;//The cells in the game are 64 by 64, as are the wall textures.
     public Level(String map,Player player,ArrayList<Sprite>objects) throws IOException{
@@ -70,7 +72,9 @@ public class Level {
                     walls[i][j]=0;//blank spot
                     //sets the player's position to the current cell
                     player.setPos(i*64+32,j*64+32);
-                } 
+                }else if(isExit(color[0],color[1],color[2])){
+                    
+                }
                 else{
                     walls[i][j]=0;
                 }
@@ -109,5 +113,9 @@ public class Level {
         catch(Exception e){
             return true;
         }
+    }
+    
+    public boolean isExit(int r, int g, int b){
+        return LevelMaster.isExit(new Color(r,g,b));
     }
 }

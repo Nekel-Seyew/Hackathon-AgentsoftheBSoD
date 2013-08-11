@@ -6,6 +6,7 @@ package raycaster;
 
 import Game.GameBase;
 import Hardware_Accelerated.AccelGame;
+import java.awt.Color;
 
 /**
  *
@@ -17,6 +18,6 @@ public class Raycaster {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new AccelGame(new Main(), "3D Maze Game").run();
+        new AccelGame(new Main(), "Finding Brunhilde").run();
     }
 }
