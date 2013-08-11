@@ -24,6 +24,7 @@ public class Menu {
     public Menu(){
         cover= new Image2D("Resources/Sprites/MenuCover.png");
         exitMenu=true;
+        StoryJournal.makeStories();
     }
     
     public void Update(KeyBoard k){
