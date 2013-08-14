@@ -88,10 +88,9 @@ public class Main extends AGame{
         isStart=true;
         begin=new Animation(71,0,new Vector2(400,300),250);
         makeIntro();
-        startTimer=System.currentTimeMillis();
         startSound=new SoundFile("Resources/Sound/long_sound_1.wav",0);
         startSound.start();
-        Thread t= new Thread();
+        startTimer=System.currentTimeMillis();
     }
 
     @Override

@@ -43,7 +43,7 @@ public class Exit {
     
     public void update(Player p, Main game){
         this.game=game;
-        if(AMath.distance(pos, p.pos) < 100){
+        if(AMath.distance(pos, p.pos) < 100 && game.keyboard.isKeyDown('e')){
             game.giveNextLevel(next(p,game.isRebellionHappening));
             p.exitLevel(this);
         }
