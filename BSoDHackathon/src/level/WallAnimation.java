@@ -27,7 +27,7 @@ public class WallAnimation {
     public WallAnimation(String folder, int fps){
         sprite=new ArrayList<Image2D>();
         File f= new File(folder);
-        for(int i=1; i<f.list().length; i++){
+        for(int i=1; i<=f.list().length; i++){
 //            System.out.println(folder+"/"+i+".png");
             sprite.add(new Image2D(folder+"/"+i+".png"));
         }
@@ -48,6 +48,7 @@ public class WallAnimation {
             if(count >= 60/framesPerSecond){
                 index++;
                 index%=sprite.size();
+                count=0;
             }
             lastCycleNum=cyc;
         }
