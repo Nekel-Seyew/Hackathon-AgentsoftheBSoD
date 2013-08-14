@@ -62,10 +62,10 @@ public class Main extends AGame{
         isDead=false;
         menu=new Menu();
         isStart=true;
-        begin=new Animation(71,0,new Vector2(400,300),250);
         startTimer=System.currentTimeMillis();
         startSound=new SoundFile("Resources/Sound/long_sound_1.wav",0);
-        new Thread(new makeIntro()).start();
+//        begin=new Animation(71,0,new Vector2(400,300),250);
+//        new Thread(new makeIntro()).start();
         
         isRebellionHappening=false;
         player=new Player(500,500,0);
@@ -91,6 +91,7 @@ public class Main extends AGame{
         startTimer=System.currentTimeMillis();
         startSound=new SoundFile("Resources/Sound/long_sound_1.wav",0);
         startSound.start();
+        Thread t= new Thread();
     }
 
     @Override
@@ -166,8 +167,14 @@ public class Main extends AGame{
 
     @Override
     public void Draw(Graphics2D g, ImageCollection batch) {
-        if (!isStart && (!isDead || !hasWon)) {
-            if(!menu.exitMenu){
+        if (isStart) {
+            if (System.currentTimeMillis() - startTimer >= 15500) {
+                isStart = false;
+            }
+            Rect r = new Rect(0, 0, (int) begin.getWidth(), (int) begin.getHeight(), 0);
+            begin.Draw(batch, 0f, r, 3f, 3f);
+        } else if (!isStart && (!isDead || !hasWon)) {
+            if (!menu.exitMenu) {
                 menu.Draw(batch);
             }
             player.Draw(batch);
@@ -183,23 +190,17 @@ public class Main extends AGame{
                 batch.DrawString(new Vector2(680, 35), "WASD to Move", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
                 batch.DrawString(new Vector2(680, 50), "Arrows to Turn", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
                 batch.DrawString(new Vector2(680, 65), "E to Swing Sword", Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
-                batch.DrawString(new Vector2(20, 500), "Current Location: "+this.currentLocation, Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
-                batch.DrawString(new Vector2(20, 515), "Health: "+this.player.getHelath(), Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
+                batch.DrawString(new Vector2(20, 500), "Current Location: " + this.currentLocation, Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
+                batch.DrawString(new Vector2(20, 515), "Health: " + this.player.getHelath(), Color.white, 1000000000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
             }
-        }else if(isDead){
-            batch.drawRect(new Vector2(0,0), 800, 600, Color.black, 1000);
+        } else if (isDead) {
+            batch.drawRect(new Vector2(0, 0), 800, 600, Color.black, 1000);
             batch.DrawString(new Vector2(200, 200), "YOU'RE DEAD", Color.red, 10000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
-        }else if(hasWon){
-            batch.drawRect(new Vector2(0,0), 800, 600, Color.black, 1000);
+        } else if (hasWon) {
+            batch.drawRect(new Vector2(0, 0), 800, 600, Color.black, 1000);
             batch.DrawString(new Vector2(200, 200), "SUCCESS", Color.white, 10000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
             batch.DrawString(new Vector2(200, 300), "After gaining all the data, I'm going to share this with the world.", Color.white, 10000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
             batch.DrawString(new Vector2(200, 315), "The World Needs hope afterall", Color.white, 10000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
-        }else{
-            if(System.currentTimeMillis()-startTimer >= 15500){
-                isStart=false;
-            }
-            Rect r=new Rect(0,0,(int)begin.getWidth(),(int)begin.getHeight(),0);
-            begin.Draw(batch,0f,r,3f,3f);
         }
     }
 
