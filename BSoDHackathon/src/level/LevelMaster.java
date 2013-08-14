@@ -189,6 +189,7 @@ public class LevelMaster {
         public void run() {
             if (anim) {
                 WallAnimation w2 = new WallAnimation("Resources/Sprites/Walls/"+next, 10,Camera.rayCount);
+                w2.make();
                 walls.put(rgb, w2);
             } else {
                 Image2D[] w2 = new Image2D[Camera.rayCount];

@@ -24,11 +24,13 @@ public class WallAnimation {
     int lastCycleNum;
     int count;
     
+    int numberOfRays;
+    String folder;
+    
     public WallAnimation(String folder, int fps, int numberOfRays){
         sprites=new ArrayList<>();
-        for(int i=0; i<numberOfRays; i++){
-            new Thread(new load(sprites,folder)).start();
-        }
+        this.numberOfRays=numberOfRays;
+        this.folder=new String(folder);
         framesPerSecond=fps;
         lastCycleNum=0;
         index=0;
@@ -71,6 +73,12 @@ public class WallAnimation {
                 sprite.add(new Image2D(file + "/" + i + ".png"));
             }
             sprites.add(sprite);
+        }
+    }
+    
+    public void make(){
+        for(int i=0; i<numberOfRays; i++){
+            new Thread(new load(sprites,folder)).start();
         }
     }
     

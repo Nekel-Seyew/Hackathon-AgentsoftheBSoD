@@ -90,6 +90,7 @@ public class Main extends AGame{
         makeIntro();
         startTimer=System.currentTimeMillis();
         startSound=new SoundFile("Resources/Sound/long_sound_1.wav",0);
+        startSound.start();
     }
 
     @Override
@@ -159,9 +160,6 @@ public class Main extends AGame{
                 if(startSound.isAlive()){
                     startSound.kill();
                 }
-            }
-            if(!startSound.isAlive()){
-                startSound.start();
             }
         }
     }
