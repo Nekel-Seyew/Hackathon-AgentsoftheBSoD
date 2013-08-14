@@ -50,13 +50,14 @@ public class LevelMaster {
                     int b=Integer.parseInt(bS.substring(0, bS.indexOf(',')));
                     String sprite=string.substring(string.indexOf("@")+1,string.indexOf("}"));
                     Color rgb=new Color(r,g,b);
-                    Image2D[] w2=new Image2D[Camera.rayCount];
-                    for(int i=0; i<Camera.rayCount; i++){
-                        aaa="Resources/Sprites/Walls/"+sprite;
-                        w2[i]=new Image2D("Resources/Sprites/Walls/"+sprite);
-                    }
-                    walls.put(rgb, w2);
-                    exits.put(rgb, next);
+                    new Thread(new loadExits(sprite, next, rgb)).start();
+//                    Image2D[] w2=new Image2D[Camera.rayCount];
+//                    for(int i=0; i<Camera.rayCount; i++){
+//                        aaa="Resources/Sprites/Walls/"+sprite;
+//                        w2[i]=new Image2D("Resources/Sprites/Walls/"+sprite);
+//                    }
+//                    walls.put(rgb, w2);
+//                    exits.put(rgb, next);
                 }
             }
         }catch(Exception e){
@@ -85,12 +86,13 @@ public class LevelMaster {
                     }else{
                         rgb=new Color(r,g,b);
                     }
-                    Image2D[] w2=new Image2D[Camera.rayCount];
-                    for(int i=0; i<Camera.rayCount; i++){
-                        aaa="Resources/Sprites/Walls/"+next;
-                        w2[i]=new Image2D("Resources/Sprites/Walls/"+next);
-                    }
-                    walls.put(rgb, w2);
+                    new Thread(new loadWalls(next, rgb)).start();
+//                    Image2D[] w2=new Image2D[Camera.rayCount];
+//                    for(int i=0; i<Camera.rayCount; i++){
+//                        aaa="Resources/Sprites/Walls/"+next;
+//                        w2[i]=new Image2D("Resources/Sprites/Walls/"+next);
+//                    }
+//                    walls.put(rgb, w2);
                 }
             }
         }catch(Exception e){
@@ -149,5 +151,48 @@ public class LevelMaster {
     
     public static boolean isExit(Color c) {
         return exits.containsKey(c);
+    }
+    
+    private static class loadWalls implements Runnable{
+
+        private String next;
+        private Color rgb;
+
+        public loadWalls(String n, Color c) {
+            this.rgb = c;
+            this.next = new String(n);
+        }
+
+        @Override
+        public void run() {
+            Image2D[] w2 = new Image2D[Camera.rayCount];
+            for (int i = 0; i < Camera.rayCount; i++) {
+                w2[i] = new Image2D("Resources/Sprites/Walls/" + next);
+            }
+            walls.put(rgb, w2);
+        }
+    }
+    
+    private static class loadExits implements Runnable {
+
+        private String sprite;
+        private String next;
+        private Color rgb;
+
+        public loadExits(String s, String n, Color c) {
+            this.sprite = new String(s);
+            this.next = new String(n);
+            this.rgb = c;
+        }
+
+        @Override
+        public void run() {
+            Image2D[] w2 = new Image2D[Camera.rayCount];
+            for (int i = 0; i < Camera.rayCount; i++) {
+                w2[i] = new Image2D("Resources/Sprites/Walls/" + sprite);
+            }
+            walls.put(rgb, w2);
+            exits.put(rgb, next);
+        }
     }
 }
