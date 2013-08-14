@@ -28,7 +28,7 @@ public class WallAnimation {
     String folder;
     
     public WallAnimation(String folder, int fps, int numberOfRays){
-        sprites=new ArrayList<>();
+        sprites=new ArrayList<>(numberOfRays);
         this.numberOfRays=numberOfRays;
         this.folder=new String(folder);
         framesPerSecond=fps;
@@ -54,32 +54,14 @@ public class WallAnimation {
         }
     }
     
-    
-    private class load implements Runnable{
-        ArrayList<ArrayList<Image2D>> sprites;
-        String file;
-
-        public load(ArrayList<ArrayList<Image2D>> sprites, String file) {
-            this.sprites = sprites;
-            this.file = file;
-        }
-        
-        @Override
-        public void run() {
-            ArrayList<Image2D> sprite = new ArrayList<>();
-            File f = new File(file);
-            for (int i = 1; i <= f.list().length; i++) {
+    public void add(int place, String file){
+        ArrayList<Image2D> sprite = new ArrayList<>();
+        File f = new File(file);
+        for (int i = 1; i <= f.list().length; i++) {
 //            System.out.println(folder+"/"+i+".png");
-                sprite.add(new Image2D(file + "/" + i + ".png"));
-            }
-            sprites.add(sprite);
+            sprite.add(new Image2D(file + "/" + i + ".png"));
         }
-    }
-    
-    public void make(){
-        for(int i=0; i<numberOfRays; i++){
-            new Thread(new load(sprites,folder)).start();
-        }
+        sprites.add(place, sprite);
     }
     
 }
