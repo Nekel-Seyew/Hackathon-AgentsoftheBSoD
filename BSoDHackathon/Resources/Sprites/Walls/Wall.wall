@@ -17,3 +17,4 @@
 #Wall:{176,0,0,@bricks.png}
 #Wall:{176,0,176,@bricksdoor.png}
 #Wall:{177,0,0,@brickwindow.png}
+#WallAnim:{122,174,225,@TestAnim}

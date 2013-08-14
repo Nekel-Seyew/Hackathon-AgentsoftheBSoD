@@ -4,17 +4,15 @@
  */
 package raycaster;
 
-import Advance.AMath;
 import Utilities.Animation;
 import Utilities.Image2D;
 import Utilities.ImageCollection;
 import Utilities.Rect;
 import Utilities.Vector2;
 import java.awt.Color;
-import java.awt.Rectangle;
-import level.Exit;
 import level.Level;
 import level.LevelMaster;
+import level.WallAnimation;
 import objects.Player;
 
 /**
@@ -62,6 +60,7 @@ public class Camera {
     boolean sprites = true;//Whether or not I'm drawing sprites
     boolean elderscrolls = false;
     double floorindex;
+    boolean cycleDone;
 
     public Camera(double FOV, int RayCount, double Width, double Height) {
         instance=this;
@@ -95,6 +94,7 @@ public class Camera {
         sf = screenWidth * cellSize * 0.5 / Math.tan(fov / 2);//Maths.  I did the trigonometry, and it turned out okay.
         floor = !true;//Stupid floor //BUT REALLY COOL, IF IT WORKED(kyle)
         clip = 3000;
+        cycleDone=false;
     }
 
     public void setLevel(int[][] Level) {
@@ -116,6 +116,7 @@ public class Camera {
     }
 
     public void castRays(ImageCollection batch, double X, double Y, double Angle) {
+        cycleDone=false;
         //This is an ungodly mess.  I still can't believe it worked/works.
         angle = Angle;
         angleOffset = -fov / 2;
@@ -306,7 +307,8 @@ public class Camera {
             screenX += xStep;
 
         }
-
+        cycleDone=true;
+        Main.inst.cycleIncrease();
     }
 
     public int cell(double X, double Y) {
@@ -326,8 +328,14 @@ public class Camera {
             return;
         }else{
             Color a=LevelMaster.w.get(tex);
-            Image2D[] w= LevelMaster.walls.get(a);
-            batch.Draw(w[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
+            Object w= LevelMaster.walls.get(a);
+            if(w instanceof Image2D[]){
+                Image2D[] we=(Image2D[])w;
+                batch.Draw(we[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
+            }else{
+                WallAnimation[] we=(WallAnimation[])w;
+                we[i].Draw(batch, new Vector2(x + xStep * cellSize * 0.5, y), (float) xStep, (float) (depth / cellSize), 0f, 0f, Color.white, part, (int) depth + 1000);
+            }
          }
         
 //        switch (tex) {

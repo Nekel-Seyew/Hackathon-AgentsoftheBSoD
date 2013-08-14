@@ -4,7 +4,9 @@
  */
 package level;
 
+import Utilities.Animation;
 import Utilities.Image2D;
+import Utilities.Vector2;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,7 +23,7 @@ public class LevelMaster {
     public static Hashtable<Color, String> exits=new Hashtable<Color, String>();
     public static Hashtable<String, ArrayList<Exit>> rooms=new Hashtable<>();
     
-    public static Hashtable<Color, Image2D[]> walls=new Hashtable<Color, Image2D[]>();
+    public static Hashtable<Color, Object> walls=new Hashtable<Color, Object>();
     public static Hashtable<Integer, Color> w=new Hashtable<>();
     
     public static Hashtable<Color, String> items=new Hashtable<>();
@@ -86,13 +88,31 @@ public class LevelMaster {
                     }else{
                         rgb=new Color(r,g,b);
                     }
-                    new Thread(new loadWalls(next, rgb)).start();
+                    new Thread(new loadWalls(next, rgb,false)).start();
 //                    Image2D[] w2=new Image2D[Camera.rayCount];
 //                    for(int i=0; i<Camera.rayCount; i++){
 //                        aaa="Resources/Sprites/Walls/"+next;
 //                        w2[i]=new Image2D("Resources/Sprites/Walls/"+next);
 //                    }
 //                    walls.put(rgb, w2);
+                }
+                if(string.contains("#WallAnim:")){
+                    String next=string.substring(string.indexOf("@")+1, string.indexOf('}'));
+                    a=next;
+                    String rS=string.substring(string.indexOf("{")+1);
+                    int r=Integer.parseInt(rS.substring(0, rS.indexOf(',')));
+                    String gS=rS.substring(rS.indexOf(',')+1);
+                    int g=Integer.parseInt(gS.substring(0, gS.indexOf(',')));
+                    String bS=gS.substring(gS.indexOf(',')+1);
+                    aaaa=bS;
+                    int b=Integer.parseInt(bS.substring(0, bS.indexOf(',')));
+                    Color rgb;
+                    if(r==0 && b==0 && g==0){
+                        rgb=Color.black;
+                    }else{
+                        rgb=new Color(r,g,b);
+                    }
+                    new Thread(new loadWalls(next, rgb,true)).start();
                 }
             }
         }catch(Exception e){
@@ -157,19 +177,29 @@ public class LevelMaster {
 
         private String next;
         private Color rgb;
+        private boolean anim;
 
-        public loadWalls(String n, Color c) {
+        public loadWalls(String n, Color c, boolean anim) {
             this.rgb = c;
             this.next = new String(n);
+            this.anim=anim;
         }
 
         @Override
         public void run() {
-            Image2D[] w2 = new Image2D[Camera.rayCount];
-            for (int i = 0; i < Camera.rayCount; i++) {
-                w2[i] = new Image2D("Resources/Sprites/Walls/" + next);
+            if (anim) {
+                WallAnimation[] w2 = new WallAnimation[Camera.rayCount];
+                for (int i = 0; i < Camera.rayCount; i++) {
+                    w2[i] = new WallAnimation("Resources/Sprites/Walls/"+next,10);
+                }
+                walls.put(rgb, w2);
+            } else {
+                Image2D[] w2 = new Image2D[Camera.rayCount];
+                for (int i = 0; i < Camera.rayCount; i++) {
+                    w2[i] = new Image2D("Resources/Sprites/Walls/" + next);
+                }
+                walls.put(rgb, w2);
             }
-            walls.put(rgb, w2);
         }
     }
     

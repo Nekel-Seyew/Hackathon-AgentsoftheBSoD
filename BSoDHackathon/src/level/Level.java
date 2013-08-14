@@ -127,6 +127,9 @@ public class Level {
                 }else if(colorEqual(color,new Color(177,0,0))){
                     walls[i][j]=30;
                     LevelMaster.w.put(30, wall[i][j]);
+                }else if(colorEqual(color, new Color(122,174,225))){
+                    walls[i][j]=31;
+                    LevelMaster.w.put(31, wall[i][j]);
                 }else if (color[0]==255 && color[1]==0 && color[2]==0){
                     walls[i][j]=0;//blank spot
                     //adds a pixelated column

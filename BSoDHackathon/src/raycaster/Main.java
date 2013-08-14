@@ -32,6 +32,9 @@ import objects.Sprite;
  * @author pcowal15
  */
 public class Main extends AGame{
+    
+    public static Main inst;
+    
     Camera camera;
     Level level;
     Player player;
@@ -50,9 +53,11 @@ public class Main extends AGame{
     boolean hasWon;
     boolean isDead;
     
+    public int cycleNum;
 
     @Override
     public void InitializeAndLoad() {
+        inst=this;
         hasWon=false;
         isDead=false;
         menu=new Menu();
@@ -237,6 +242,11 @@ public class Main extends AGame{
         public void run(){
             makeIntro();
         }
+    }
+    
+    public void cycleIncrease(){
+        this.cycleNum+=1;
+        this.cycleNum%=60;
     }
     
 }
