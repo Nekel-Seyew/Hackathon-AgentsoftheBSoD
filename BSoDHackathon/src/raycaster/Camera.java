@@ -10,6 +10,7 @@ import Utilities.ImageCollection;
 import Utilities.Rect;
 import Utilities.Vector2;
 import java.awt.Color;
+import java.util.ArrayList;
 import level.Level;
 import level.LevelMaster;
 import level.WallAnimation;
@@ -26,9 +27,6 @@ public class Camera {
 
     double fov;//the angle of the field of view.  Probably should be something like pi/3 or pi/4
     public static int rayCount;//The number of rays, I think
-    double[] rays;//The array containing the distances calculated, probably
-    int[] rayTexs;//The array containing the detected texture integers established in the Level class
-    Image2D[] rayImages;//Not used, I think
     double screenWidth;
     double screenHeight;
     double xStep;//The change in x position ON THE SCREEN
@@ -61,6 +59,8 @@ public class Camera {
     boolean elderscrolls = false;
     double floorindex;
     boolean cycleDone;
+    
+    ArrayList<WallAnimation> wallAnimations;
 
     public Camera(double FOV, int RayCount, double Width, double Height) {
         instance=this;
@@ -69,25 +69,23 @@ public class Camera {
         rayCount = RayCount;
         angleOffset = -fov / 2;//(It goes from -fov/2 to +fov/2, see)
         angleStep = fov / rayCount;//So when (n) rays are cast, the angle smoothly pans from -fov/2 to fov/2
-        rays = new double[rayCount];
-        rayTexs = new int[rayCount];
-        brick = new Image2D[rayCount];
-        brick2 = new Image2D[rayCount];
-        stone = new Image2D[rayCount];
-        metal = new Image2D[rayCount];
+//        brick = new Image2D[rayCount];
+//        brick2 = new Image2D[rayCount];
+//        stone = new Image2D[rayCount];
+//        metal = new Image2D[rayCount];
         floorindex = 0;
-        for (int i = 0; i < rayCount; i++) {
-            rays[i] = -1;
-            rayTexs[i] = -1;
-            if (textures) {
-                //This is a lot of images.  4*rayCount, to be exact.  So that's like 1280
-                brick[i] = new Image2D("Resources/Sprites/ironwall.png");
-                brick2[i] = new Image2D("src/Resources/brick2.png");
-                stone[i] = new Image2D("src/Resources/metal.png");
-                metal[i] = new Image2D("src/Resources/metal_dark.png");
-            }
-        }
-        rayImages = new Image2D[rayCount];//I think this was before I used multiple textures
+//        for (int i = 0; i < rayCount; i++) {
+//            rays[i] = -1;
+//            rayTexs[i] = -1;
+//            if (textures) {
+//                //This is a lot of images.  4*rayCount, to be exact.  So that's like 1280
+//                brick[i] = new Image2D("Resources/Sprites/ironwall.png");
+//                brick2[i] = new Image2D("src/Resources/brick2.png");
+//                stone[i] = new Image2D("src/Resources/metal.png");
+//                metal[i] = new Image2D("src/Resources/metal_dark.png");
+//            }
+//        }
+//        rayImages = new Image2D[rayCount];//I think this was before I used multiple textures
         screenWidth = Width;
         screenHeight = Height;
         xStep = screenWidth / rayCount;
@@ -95,6 +93,7 @@ public class Camera {
         floor = !true;//Stupid floor //BUT REALLY COOL, IF IT WORKED(kyle)
         clip = 3000;
         cycleDone=false;
+        wallAnimations=new ArrayList<>();
     }
 
     public void setLevel(int[][] Level) {
@@ -309,6 +308,10 @@ public class Camera {
         }
         cycleDone=true;
         Main.inst.cycleIncrease();
+        for(WallAnimation wa : this.wallAnimations){
+            wa.update();
+        }
+        this.wallAnimations.clear();
     }
 
     public int cell(double X, double Y) {
@@ -333,8 +336,11 @@ public class Camera {
                 Image2D[] we=(Image2D[])w;
                 batch.Draw(we[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
             }else{
-                WallAnimation[] we=(WallAnimation[])w;
-                we[i].Draw(batch, new Vector2(x + xStep * cellSize * 0.5, y), (float) xStep, (float) (depth / cellSize), 0f, 0f, Color.white, part, (int) depth + 1000);
+                WallAnimation we=(WallAnimation)w;
+                we.Draw(batch, new Vector2(x + xStep * cellSize * 0.5, y), (float) xStep, (float) (depth / cellSize), 0f, 0f, Color.white, part, (int) depth + 1000,i);
+                if(!this.wallAnimations.contains(we)){
+                    this.wallAnimations.add(we);
+                }
             }
          }
         

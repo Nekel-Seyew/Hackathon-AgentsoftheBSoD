@@ -18,42 +18,60 @@ import raycaster.Main;
  * @author kdsweenx
  */
 public class WallAnimation {
-    ArrayList<Image2D> sprite;
+    ArrayList<ArrayList<Image2D>> sprites;
     int index;
     int framesPerSecond;
     int lastCycleNum;
     int count;
     
-    public WallAnimation(String folder, int fps){
-        sprite=new ArrayList<Image2D>();
-        File f= new File(folder);
-        for(int i=1; i<=f.list().length; i++){
-//            System.out.println(folder+"/"+i+".png");
-            sprite.add(new Image2D(folder+"/"+i+".png"));
+    public WallAnimation(String folder, int fps, int numberOfRays){
+        sprites=new ArrayList<>();
+        for(int i=0; i<numberOfRays; i++){
+            new Thread(new load(sprites,folder)).start();
         }
-//        for(String s: f.list()){
-//            System.out.println(folder+s);
-//            sprite.add(new Image2D(folder+"/"+s));
-//        }
         framesPerSecond=fps;
         lastCycleNum=0;
         index=0;
         count=0;
     }
     
-    public void Draw(ImageCollection batch, Vector2 pos, float scaleX, float scaleY, float angle, float percent, Color c, Rect drawnArea, int depth){
+    public void Draw(ImageCollection batch, Vector2 pos, float scaleX, float scaleY, float angle, float percent, Color c, Rect drawnArea, int depth, int i){
+        batch.Draw(sprites.get(i).get(index), pos, angle, c, percent, scaleX, scaleY, drawnArea, depth);
+    }
+    
+    public void update(){
         int cyc=Main.inst.cycleNum;
-        if(cyc > lastCycleNum || cyc == 0){
-            count++;
+        if(cyc > lastCycleNum || cyc==0){
+            count+=1;
             if(count >= 60/framesPerSecond){
-                index++;
-                index%=sprite.size();
+                index+=1;
+                index%=sprites.get(0).size();
                 count=0;
             }
             lastCycleNum=cyc;
         }
-        batch.Draw(sprite.get(index), pos, angle, c, percent, scaleX, scaleY, drawnArea, depth);
     }
     
+    
+    private class load implements Runnable{
+        ArrayList<ArrayList<Image2D>> sprites;
+        String file;
+
+        public load(ArrayList<ArrayList<Image2D>> sprites, String file) {
+            this.sprites = sprites;
+            this.file = file;
+        }
+        
+        @Override
+        public void run() {
+            ArrayList<Image2D> sprite = new ArrayList<>();
+            File f = new File(file);
+            for (int i = 1; i <= f.list().length; i++) {
+//            System.out.println(folder+"/"+i+".png");
+                sprite.add(new Image2D(file + "/" + i + ".png"));
+            }
+            sprites.add(sprite);
+        }
+    }
     
 }

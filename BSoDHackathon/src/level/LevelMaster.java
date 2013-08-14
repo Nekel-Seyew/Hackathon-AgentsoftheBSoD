@@ -188,10 +188,7 @@ public class LevelMaster {
         @Override
         public void run() {
             if (anim) {
-                WallAnimation[] w2 = new WallAnimation[Camera.rayCount];
-                for (int i = 0; i < Camera.rayCount; i++) {
-                    w2[i] = new WallAnimation("Resources/Sprites/Walls/"+next,10);
-                }
+                WallAnimation w2 = new WallAnimation("Resources/Sprites/Walls/"+next, 10,Camera.rayCount);
                 walls.put(rgb, w2);
             } else {
                 Image2D[] w2 = new Image2D[Camera.rayCount];
