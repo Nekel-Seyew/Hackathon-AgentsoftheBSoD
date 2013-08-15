@@ -1,0 +1,9 @@
+$START={
+    @Hello! Welcome to Eden. hallelujah.;
+    #PC:("Thanks?";->2;}
+    #PC:{"Peace be with you?;->1;}
+}
+
+$1={
+
+}
