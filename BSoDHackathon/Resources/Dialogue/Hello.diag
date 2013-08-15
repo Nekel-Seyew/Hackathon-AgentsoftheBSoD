@@ -1,9 +1,21 @@
 $START={
     @Hello! Welcome to Eden. hallelujah.;
-    #PC:("Thanks?";->2;}
+    #PC:{"Thanks?";->2;}
     #PC:{"Peace be with you?;->1;}
 }
 
 $1={
+    @And with you Brother!;
+    #PC:{"Goodbye"->END;}
+}
 
+$2={
+    @Enjoy your time here!;
+    #PC:{"Thanks, could you tell me who to ask if I was looking for something?";->3;}
+    #PC:{"Goodbye";->END;}
+}
+
+$3={
+    @Go to the Information kiosk by the door. It says Info above it. Blessings!;
+    #PC:{"Thanks, Goodbye.";->END;}
 }
