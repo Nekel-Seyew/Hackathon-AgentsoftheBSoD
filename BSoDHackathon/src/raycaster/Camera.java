@@ -334,15 +334,20 @@ public class Camera {
             Object w= LevelMaster.walls.get(a);
             if(w instanceof Image2D[]){
                 Image2D[] we=(Image2D[])w;
-                batch.Draw(we[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
-            }else{
-                WallAnimation we=(WallAnimation)w;
-                we.Draw(batch, new Vector2(x + xStep * cellSize * 0.5, y), (float) xStep, (float) (depth / cellSize), 0f, 0f, Color.white, part, (int) depth + 1000,i);
-                if(!this.wallAnimations.contains(we)){
+                if(we.length<=0){
+                    int asdf = 0;
+                    System.out.println("Empty array for color: " + a);
+                } else {
+                    batch.Draw(we[i], new Vector2(x + xStep * cellSize * 0.5, y), 0, (float) xStep, (float) (depth / cellSize), part, (int) depth + 1000);
+                }
+            } else {
+                WallAnimation we = (WallAnimation) w;
+                we.Draw(batch, new Vector2(x + xStep * cellSize * 0.5, y), (float) xStep, (float) (depth / cellSize), 0f, 0f, Color.white, part, (int) depth + 1000, i);
+                if (!this.wallAnimations.contains(we)) {
                     this.wallAnimations.add(we);
                 }
             }
-         }
+        }
         
 //        switch (tex) {
 //            case 1:

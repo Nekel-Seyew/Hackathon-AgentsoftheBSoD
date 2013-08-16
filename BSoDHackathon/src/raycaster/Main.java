@@ -55,6 +55,9 @@ public class Main extends AGame{
     
     public int cycleNum;
 
+    int fps;
+    long st=System.currentTimeMillis();
+    
     @Override
     public void InitializeAndLoad() {
         inst=this;
@@ -69,28 +72,30 @@ public class Main extends AGame{
         
         isRebellionHappening=false;
         player=new Player(500,500,0);
-        LevelMaster.makeExists();
+//        LevelMaster.makeExists();
         sprites=new ArrayList<Sprite>();
+         camera=new Camera(Math.PI/4,320,640,480);//Field of View, Number of Rays, Width, Height
+        LevelMaster.makeWalls();
+        LevelMaster.makeExists();
+        LevelMaster.makeItemsAndNPC();
         try {
             level=new Level("Resources/Dungeons/train.png",player,sprites);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        camera=new Camera(Math.PI/4,320,640,480);//Field of View, Number of Rays, Width, Height
         //camera=new Camera(Math.PI/4,1279,640,480); //MAX RAY COUNT
         camera.setLevel(level.getWalls()); //
         particles=new ParticleManager(Color.BLUE,-0.1,0.5,0,false,300);//color,gravity,bounciness,air resistance,stickiness,lifetime
         this.setBackgroundColor(Color.BLACK);
-        LevelMaster.makeWalls();
-        LevelMaster.makeExists();
-        LevelMaster.makeItemsAndNPC();
         
         isStart=true;
-        begin=new Animation(71,0,new Vector2(400,300),250);
+        begin=new Animation(70,0,new Vector2(400,300),250);
         makeIntro();
         startSound=new SoundFile("Resources/Sound/long_sound_1.wav",0);
         startSound.start();
         startTimer=System.currentTimeMillis();
+        
+        
     }
 
     @Override
@@ -167,11 +172,13 @@ public class Main extends AGame{
     @Override
     public void Draw(Graphics2D g, ImageCollection batch) {
         if (isStart) {
-            if (System.currentTimeMillis() - startTimer >= 15500) {
+            if (System.currentTimeMillis() - startTimer >= 15250) {
                 isStart = false;
+                return;
+            }else{
+                Rect r = new Rect(0, 0, (int) begin.getWidth(), (int) begin.getHeight(), 0);
+                begin.Draw(batch, 0f, r, 3f, 3f);
             }
-            Rect r = new Rect(0, 0, (int) begin.getWidth(), (int) begin.getHeight(), 0);
-            begin.Draw(batch, 0f, r, 3f, 3f);
         } else if (!isStart && (!isDead || !hasWon)) {
             if (!menu.exitMenu) {
                 menu.Draw(batch);
@@ -201,6 +208,15 @@ public class Main extends AGame{
             batch.DrawString(new Vector2(200, 300), "After gaining all the data, I'm going to share this with the world.", Color.white, 10000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
             batch.DrawString(new Vector2(200, 315), "The World Needs hope afterall", Color.white, 10000, FontType.MONOSPACED, FontStyle.PLAIN, 12);
         }
+        
+        if(System.currentTimeMillis()-st >= 1000){
+            System.out.println("FPS: "+fps);
+            st=System.currentTimeMillis();
+            fps=0;
+        }else{
+            fps+=1;
+        }
+        
     }
 
     

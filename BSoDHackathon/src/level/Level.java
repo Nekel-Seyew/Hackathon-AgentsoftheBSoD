@@ -64,84 +64,9 @@ public class Level {
                 mapImage.getRaster().getPixel(i, j, color);
                 wall[i][j]=new Color(color[0], color[1],color[2]);
                 //depending on the color, it sets the wall value and/or adds an object
-                if (color[0]==0 && color[1]==0 && color[2]==0){
-                    walls[i][j]=1;//probably brick
-                    LevelMaster.w.put(1, wall[i][j]);
-                }     
-                else if (color[0]==128 && color[1]==0 && color[2]==0){
-                    walls[i][j]=2;//metal
-                    LevelMaster.w.put(2, wall[i][j]);
-                }
-                else if (color[0]==0 && color[1]==128 && color[2]==0){
-                    walls[i][j]=3;//another metal
-                    LevelMaster.w.put(3, wall[i][j]);
-                }
-                else if (color[0]==0 && color[1]==0 && color[2]==128){
-                    walls[i][j]=4;//I'm not even sure
-                    LevelMaster.w.put(4, wall[i][j]);
-                }else if(color[0]==200 && color[1]==200 && color[2]==200){
-                    walls[i][j]=15;
-                    LevelMaster.w.put(15, wall[i][j]);
-                }else if(color[0]==100 && color[1]==100 && color[2]==100){
-                    walls[i][j]=16;
-                    LevelMaster.w.put(16, wall[i][j]);
-                }else if(color[0]==100 && color[1]==50 && color[2]==25){
-                    walls[i][j]=17;
-                    LevelMaster.w.put(17, wall[i][j]);
-                }else if(color[0]==150 && color[1]==150 && color[2]==150){
-                    walls[i][j]=18;
-                    LevelMaster.w.put(18, wall[i][j]);
-                }else if(colorEqual(color, new Color(200,200,0))){
-                    walls[i][j]=19;
-                    LevelMaster.w.put(19, wall[i][j]);
-                }else if(colorEqual(color, new Color(255,1,1))){
-                    walls[i][j]=20;
-                    LevelMaster.w.put(20, wall[i][j]);
-                }else if(colorEqual(color, new Color(127,127,127))){
-                    walls[i][j]=22;
-                    LevelMaster.w.put(22, wall[i][j]);
-                }else if(colorEqual(color, new Color(100,234,123))){
-                    walls[i][j]=23;
-                    LevelMaster.w.put(23, wall[i][j]);
-                }else if(colorEqual(color, new Color(0,20,255))){
-                    walls[i][j]=24;
-                    LevelMaster.w.put(24, wall[i][j]);
-                }else if(colorEqual(color, new Color(20,20,20))){
-                    walls[i][j]=25;
-                    LevelMaster.w.put(25, wall[i][j]);
-                }else if(colorEqual(color, new Color(100,25,50))){
-                    walls[i][j]=26;
-                    LevelMaster.w.put(26, wall[i][j]);
-                }else if(colorEqual(color, new Color(200,0,0))){
-                    walls[i][j]=27;
-                    LevelMaster.w.put(27, wall[i][j]);
-                }else if(colorEqual(color, new Color(32,45,54))){
-                    walls[i][j]=0;
-                    
-                }else if(colorEqual(color,new Color(176,0,0))){
-                    walls[i][j]=28;
-                    LevelMaster.w.put(28, wall[i][j]);
-                }else if(colorEqual(color,new Color(176,0,176))){
-                    walls[i][j]=29;
-                    LevelMaster.w.put(29, wall[i][j]);
-                }else if(colorEqual(color,new Color(177,0,0))){
-                    walls[i][j]=30;
-                    LevelMaster.w.put(30, wall[i][j]);
-                }else if(colorEqual(color, new Color(122,174,225))){
-                    walls[i][j]=31;
-                    LevelMaster.w.put(31, wall[i][j]);
-                }else if (color[0]==255 && color[1]==0 && color[2]==0){
-                    walls[i][j]=0;//blank spot
-                    //adds a pixelated column
-                    objects.add(new Pillar(new Vector2(i*64+32,j*64+32)));
-                }
-                else if (color[0]==0 && color[1]==255 && color[2]==0){
-                    walls[i][j]=0;//another blank spot
-                }
-                else if (color[0]==0 && color[1]==0 && color[2]==255){
-                    walls[i][j]=0;//blank spot
-                }
-                else if (color[0]==255 && color[1]==255 && color[2]==0){
+                if(LevelMaster.isWall(wall[i][j]) && !isExit(color[0],color[1],color[2])){
+                    walls[i][j]=LevelMaster.getNum(wall[i][j]);
+                }else if (color[0]==255 && color[1]==255 && color[2]==0){
                     walls[i][j]=0;//blank spot
                     //sets the player's position to the current cell
                     player.setPos(i*64+32,j*64+32);
@@ -150,14 +75,106 @@ public class Level {
                 }
                 else if(isExit(color[0],color[1],color[2])){
                     addDoor(i,j,color,player,map);
-//                    walls[i][j]=5;
-//                    LevelMaster.w.put(5, wall[i][j]);
-//                    exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j]));
                 }
                 else{
                     this.Zombie(color, i, j);
                     walls[i][j]=0;
                 }
+//                
+//                if (color[0]==0 && color[1]==0 && color[2]==0){
+//                    walls[i][j]=1;//probably brick
+//                    LevelMaster.w.put(1, wall[i][j]);
+//                }     
+//                else if (color[0]==128 && color[1]==0 && color[2]==0){
+//                    walls[i][j]=2;//metal
+//                    LevelMaster.w.put(2, wall[i][j]);
+//                }
+//                else if (color[0]==0 && color[1]==128 && color[2]==0){
+//                    walls[i][j]=3;//another metal
+//                    LevelMaster.w.put(3, wall[i][j]);
+//                }
+//                else if (color[0]==0 && color[1]==0 && color[2]==128){
+//                    walls[i][j]=4;//I'm not even sure
+//                    LevelMaster.w.put(4, wall[i][j]);
+//                }else if(color[0]==200 && color[1]==200 && color[2]==200){
+//                    walls[i][j]=15;
+//                    LevelMaster.w.put(15, wall[i][j]);
+//                }else if(color[0]==100 && color[1]==100 && color[2]==100){
+//                    walls[i][j]=16;
+//                    LevelMaster.w.put(16, wall[i][j]);
+//                }else if(color[0]==100 && color[1]==50 && color[2]==25){
+//                    walls[i][j]=17;
+//                    LevelMaster.w.put(17, wall[i][j]);
+//                }else if(color[0]==150 && color[1]==150 && color[2]==150){
+//                    walls[i][j]=18;
+//                    LevelMaster.w.put(18, wall[i][j]);
+//                }else if(colorEqual(color, new Color(200,200,0))){
+//                    walls[i][j]=19;
+//                    LevelMaster.w.put(19, wall[i][j]);
+//                }else if(colorEqual(color, new Color(255,1,1))){
+//                    walls[i][j]=20;
+//                    LevelMaster.w.put(20, wall[i][j]);
+//                }else if(colorEqual(color, new Color(127,127,127))){
+//                    walls[i][j]=22;
+//                    LevelMaster.w.put(22, wall[i][j]);
+//                }else if(colorEqual(color, new Color(100,234,123))){
+//                    walls[i][j]=23;
+//                    LevelMaster.w.put(23, wall[i][j]);
+//                }else if(colorEqual(color, new Color(0,20,255))){
+//                    walls[i][j]=24;
+//                    LevelMaster.w.put(24, wall[i][j]);
+//                }else if(colorEqual(color, new Color(20,20,20))){
+//                    walls[i][j]=25;
+//                    LevelMaster.w.put(25, wall[i][j]);
+//                }else if(colorEqual(color, new Color(100,25,50))){
+//                    walls[i][j]=26;
+//                    LevelMaster.w.put(26, wall[i][j]);
+//                }else if(colorEqual(color, new Color(200,0,0))){
+//                    walls[i][j]=27;
+//                    LevelMaster.w.put(27, wall[i][j]);
+//                }else if(colorEqual(color, new Color(32,45,54))){
+//                    walls[i][j]=0;
+//                    
+//                }else if(colorEqual(color,new Color(176,0,0))){
+//                    walls[i][j]=28;
+//                    LevelMaster.w.put(28, wall[i][j]);
+//                }else if(colorEqual(color,new Color(176,0,176))){
+//                    walls[i][j]=29;
+//                    LevelMaster.w.put(29, wall[i][j]);
+//                }else if(colorEqual(color,new Color(177,0,0))){
+//                    walls[i][j]=30;
+//                    LevelMaster.w.put(30, wall[i][j]);
+//                }else if(colorEqual(color, new Color(122,174,225))){
+//                    walls[i][j]=31;
+//                    LevelMaster.w.put(31, wall[i][j]);
+//                }else if (color[0]==255 && color[1]==0 && color[2]==0){
+//                    walls[i][j]=0;//blank spot
+//                    //adds a pixelated column
+//                    objects.add(new Pillar(new Vector2(i*64+32,j*64+32)));
+//                }
+//                else if (color[0]==0 && color[1]==255 && color[2]==0){
+//                    walls[i][j]=0;//another blank spot
+//                }
+//                else if (color[0]==0 && color[1]==0 && color[2]==255){
+//                    walls[i][j]=0;//blank spot
+//                }
+//                else if (color[0]==255 && color[1]==255 && color[2]==0){
+//                    walls[i][j]=0;//blank spot
+//                    //sets the player's position to the current cell
+//                    player.setPos(i*64+32,j*64+32);
+//                }else if(isCD(color)){
+//                    this.makeCD(color, i, j);
+//                }
+//                else if(isExit(color[0],color[1],color[2])){
+//                    addDoor(i,j,color,player,map);
+////                    walls[i][j]=5;
+////                    LevelMaster.w.put(5, wall[i][j]);
+////                    exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j]));
+//                }
+//                else{
+//                    this.Zombie(color, i, j);
+//                    walls[i][j]=0;
+//                }
             }
         }
     }
@@ -227,37 +244,38 @@ public class Level {
         Color c=new Color(color[0], color[1], color[2]);
         Color player=new Color(255,255,0);
         exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j],s));
-        if(color[0]==128 && color[1]==60 && color[2]==60){
-            walls[i][j]=5;
-            LevelMaster.w.put(5, wall[i][j]);
-        }else if(color[0]==128 && color[1]==10 && color[2]==60){
-            walls[i][j]=6;
-            LevelMaster.w.put(6, wall[i][j]);
-        }else if(color[0]==60 && color[1]==10 && color[2]==60){
-            walls[i][j]=7;
-            LevelMaster.w.put(7, wall[i][j]);
-        }else if(color[0]==255 && color[1]==255 && color[2]==10){
-            walls[i][j]=8;
-            LevelMaster.w.put(8, wall[i][j]);
-        }else if(color[0]==10 && color[1]==248 && color[2]==255){
-            walls[i][j]=9;
-            LevelMaster.w.put(9, wall[i][j]);
-        }else if(color[0]==255 && color[1]==255 && color[2]==128){
-            walls[i][j]=10;
-            LevelMaster.w.put(10, wall[i][j]);
-        }else if(color[0]==60 && color[1]==60 && color[2]==50){
-            walls[i][j]=11;
-            LevelMaster.w.put(11, wall[i][j]);
-        }else if(color[0]==128 && color[1]==234 && color[2]==126){
-            walls[i][j]=12;
-            LevelMaster.w.put(12, wall[i][j]);
-        }else if(color[0]==255 && color[1]==5 && color[2]==5){
-            walls[i][j]=13;
-            LevelMaster.w.put(13, wall[i][j]);
-        }else if(color[0]==101 && color[1]==101 && color[2]==101){
-            walls[i][j]=14;
-            LevelMaster.w.put(14, wall[i][j]);
-        }
+        walls[i][j]=LevelMaster.getNum(c);
+//        if(color[0]==128 && color[1]==60 && color[2]==60){
+//            walls[i][j]=5;
+//            LevelMaster.w.put(5, wall[i][j]);
+//        }else if(color[0]==128 && color[1]==10 && color[2]==60){
+//            walls[i][j]=6;
+//            LevelMaster.w.put(6, wall[i][j]);
+//        }else if(color[0]==60 && color[1]==10 && color[2]==60){
+//            walls[i][j]=7;
+//            LevelMaster.w.put(7, wall[i][j]);
+//        }else if(color[0]==255 && color[1]==255 && color[2]==10){
+//            walls[i][j]=8;
+//            LevelMaster.w.put(8, wall[i][j]);
+//        }else if(color[0]==10 && color[1]==248 && color[2]==255){
+//            walls[i][j]=9;
+//            LevelMaster.w.put(9, wall[i][j]);
+//        }else if(color[0]==255 && color[1]==255 && color[2]==128){
+//            walls[i][j]=10;
+//            LevelMaster.w.put(10, wall[i][j]);
+//        }else if(color[0]==60 && color[1]==60 && color[2]==50){
+//            walls[i][j]=11;
+//            LevelMaster.w.put(11, wall[i][j]);
+//        }else if(color[0]==128 && color[1]==234 && color[2]==126){
+//            walls[i][j]=12;
+//            LevelMaster.w.put(12, wall[i][j]);
+//        }else if(color[0]==255 && color[1]==5 && color[2]==5){
+//            walls[i][j]=13;
+//            LevelMaster.w.put(13, wall[i][j]);
+//        }else if(color[0]==101 && color[1]==101 && color[2]==101){
+//            walls[i][j]=14;
+//            LevelMaster.w.put(14, wall[i][j]);
+//        }
     }
     
     public boolean isExit(int r, int g, int b){

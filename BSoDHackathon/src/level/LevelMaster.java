@@ -25,10 +25,16 @@ public class LevelMaster {
     
     public static Hashtable<Color, Object> walls=new Hashtable<Color, Object>();
     public static Hashtable<Integer, Color> w=new Hashtable<>();
+    public static Hashtable<Color, Integer> rw=new Hashtable<>();
     
     public static Hashtable<Color, String> items=new Hashtable<>();
     public static Hashtable<Color, String> NPC=new Hashtable<>();
     public static Hashtable<Color, Integer> story=new Hashtable<>();
+    
+    private static int wallNum=1;
+    
+    private static int exitThread=1;
+    private static int wallThread=1;
     
     static String a;
     static String aa;
@@ -52,7 +58,14 @@ public class LevelMaster {
                     int b=Integer.parseInt(bS.substring(0, bS.indexOf(',')));
                     String sprite=string.substring(string.indexOf("@")+1,string.indexOf("}"));
                     Color rgb=new Color(r,g,b);
-                    new Thread(new loadExits(sprite, next, rgb)).start();
+                    w.put(wallNum, rgb);
+                    rw.put(rgb, wallNum);
+                    exits.put(rgb, next);
+                    wallNum+=1;
+                    Thread t=new Thread(new loadExits(sprite, next, rgb));
+                    t.setName("Exit Thread "+exitThread++);
+                    t.start();
+                    System.out.println("Wall Thread "+t.getName()+" Started, color: "+rgb);
 //                    Image2D[] w2=new Image2D[Camera.rayCount];
 //                    for(int i=0; i<Camera.rayCount; i++){
 //                        aaa="Resources/Sprites/Walls/"+sprite;
@@ -88,7 +101,13 @@ public class LevelMaster {
                     }else{
                         rgb=new Color(r,g,b);
                     }
-                    new Thread(new loadWalls(next, rgb,false)).start();
+                    w.put(wallNum, rgb);
+                    rw.put(rgb, wallNum);
+                    wallNum+=1;
+                    Thread t=new Thread(new loadWalls(next, rgb,false));
+                    t.setName("Wall Thread "+wallThread++);
+                    t.start();
+                    System.out.println("Wall Thread "+t.getName()+" Started, color: "+rgb);
 //                    Image2D[] w2=new Image2D[Camera.rayCount];
 //                    for(int i=0; i<Camera.rayCount; i++){
 //                        aaa="Resources/Sprites/Walls/"+next;
@@ -112,7 +131,13 @@ public class LevelMaster {
                     }else{
                         rgb=new Color(r,g,b);
                     }
-                    new Thread(new loadWalls(next, rgb,true)).start();
+                    w.put(wallNum, rgb);
+                    rw.put(rgb, wallNum);
+                    wallNum+=1;
+                    Thread t=new Thread(new loadWalls(next, rgb,true));
+                    t.setName("Wall Thread "+wallThread++);
+                    t.start();
+                    
                 }
             }
         }catch(Exception e){
@@ -168,6 +193,18 @@ public class LevelMaster {
         }
     }
     
+    public static int getNum(Color c){
+        if(rw.containsKey(c)){
+            return rw.get(c);
+        }else{
+            return 0;
+        }
+    }
+    
+    public static boolean isWall(Color c){
+        return rw.containsKey(c);
+    }
+    
     
     public static boolean isExit(Color c) {
         return exits.containsKey(c);
@@ -200,6 +237,8 @@ public class LevelMaster {
                 }
                 walls.put(rgb, w2);
             }
+            
+            System.out.println("Thread color: "+rgb+" Done!");
         }
     }
     
@@ -223,6 +262,7 @@ public class LevelMaster {
             }
             walls.put(rgb, w2);
             exits.put(rgb, next);
+            System.out.println("Thread color: "+rgb+" Done!");
         }
     }
 }
