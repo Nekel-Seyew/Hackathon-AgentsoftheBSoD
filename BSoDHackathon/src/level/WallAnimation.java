@@ -26,6 +26,7 @@ public class WallAnimation {
     
     int numberOfRays;
     String folder;
+    long internalTimer=0;
     
     public WallAnimation(String folder, int fps, int numberOfRays){
         sprites=new ArrayList<>(numberOfRays);
@@ -35,6 +36,7 @@ public class WallAnimation {
         lastCycleNum=0;
         index=0;
         count=0;
+        internalTimer=System.currentTimeMillis();
     }
     
     public void Draw(ImageCollection batch, Vector2 pos, float scaleX, float scaleY, float angle, float percent, Color c, Rect drawnArea, int depth, int i){
@@ -45,10 +47,11 @@ public class WallAnimation {
         int cyc=Main.inst.cycleNum;
         if(cyc > lastCycleNum || cyc==0){
             count+=1;
-            if(count >= 60/framesPerSecond){
+            if(count >= 60/framesPerSecond && System.currentTimeMillis()-internalTimer >= 1000/(60/framesPerSecond)){
                 index+=1;
                 index%=sprites.get(0).size();
                 count=0;
+                internalTimer=System.currentTimeMillis();
             }
             lastCycleNum=cyc;
         }
