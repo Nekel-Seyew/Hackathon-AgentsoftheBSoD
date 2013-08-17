@@ -58,6 +58,8 @@ public class Main extends AGame{
     int fps;
     long st=System.currentTimeMillis();
     
+    long updateTimer=System.currentTimeMillis();
+    
     @Override
     public void InitializeAndLoad() {
         inst=this;
@@ -105,7 +107,7 @@ public class Main extends AGame{
 
     @Override
     public void Update() {
-        if ((!isStart && menu.exitMenu) && (!isDead || !hasWon)) {
+        if ((!isStart && menu.exitMenu) && (!isDead || !hasWon) ){//&& System.currentTimeMillis()-this.updateTimer >=16) {
             player.update(level);
             //player movement
             if (keyboard.isKeyDown('w') || keyboard.isKeyDown(KeyEvent.VK_UP) || keyboard.isKeyDown(KeyBoard.Eight)) {
@@ -155,7 +157,7 @@ public class Main extends AGame{
             if(player.getHelath() < -10){
                 this.isDead=true;
             }
-            
+            this.updateTimer=System.currentTimeMillis();
         }else if(!menu.exitMenu){
             menu.Update(keyboard,player);
         }
