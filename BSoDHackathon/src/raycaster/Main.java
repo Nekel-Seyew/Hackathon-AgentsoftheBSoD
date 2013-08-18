@@ -76,15 +76,18 @@ public class Main extends AGame{
         player=new Player(500,500,0);
 //        LevelMaster.makeExists();
         sprites=new ArrayList<Sprite>();
-         camera=new Camera(Math.PI/4,320,640,480);//Field of View, Number of Rays, Width, Height
+         camera=new Camera(Math.PI/4,320,640,480);//Field of View, Number of Rays, Width, 
+        LevelMaster.makeLevels();
         LevelMaster.makeWalls();
         LevelMaster.makeExists();
         LevelMaster.makeItemsAndNPC();
-        try {
-            level=new Level("Resources/Dungeons/train.png",player,sprites);
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+//        try {
+//            level=new Level("Resources/Dungeons/train.png",player,sprites);
+//        } catch (IOException ex) {
+//            Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+        level=LevelMaster.levels.get(LevelMaster.startLevel);
+        level.make(player);
         //camera=new Camera(Math.PI/4,1279,640,480); //MAX RAY COUNT
         camera.setLevel(level.getWalls()); //
         particles=new ParticleManager(Color.BLUE,-0.1,0.5,0,false,300);//color,gravity,bounciness,air resistance,stickiness,lifetime
@@ -132,6 +135,8 @@ public class Main extends AGame{
             }
             if (keyboard.isKeyDown('e')) {
                 player.swingSword();
+            }else{
+                player.stopSwing();
             }
             camera.screwFloor(player.speed() / 10);
 

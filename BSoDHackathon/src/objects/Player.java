@@ -152,6 +152,9 @@ public class Player {
         mw.attack();
         isAttacking=true;
     }
+    public void stopSwing(){
+        isAttacking=false;
+    }
     
     public void Draw(ImageCollection batch){
         mw.Draw(batch);

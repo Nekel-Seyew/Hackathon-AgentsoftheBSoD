@@ -31,6 +31,9 @@ public class LevelMaster {
     public static Hashtable<Color, String> NPC=new Hashtable<>();
     public static Hashtable<Color, Integer> story=new Hashtable<>();
     
+    public static Hashtable<String, Level> levels=new Hashtable<>();
+    public static String startLevel=null;
+    
     private static int wallNum=1;
     
     private static int exitThread=1;
@@ -40,6 +43,35 @@ public class LevelMaster {
     static String aa;
     static String aaa;
     static String aaaa;
+    
+    public static void makeLevels(){
+        try{
+            Scanner reader = new Scanner(new File("Resources/Dungeons/Levels.level"));
+            ArrayList<String> maps=null;
+            String levelName=null;
+            while(reader.hasNext()){
+                String string=reader.nextLine();
+                if(string.startsWith("$")){
+                    if(maps !=null){
+                        levels.put(levelName, new Level(maps));
+                    }else{
+                        maps=new ArrayList<String>();
+                    }
+                    levelName=string.substring(string.indexOf("$")+1,string.indexOf("="));
+                }else if(string.contains("@") && !string.contains("#")){
+                    String map=string.substring(string.indexOf("@")+1,string.indexOf(";"));
+                    maps.add("Resources/Dungeons/"+map);
+                }else if(string.contains("&START&")){
+                    if(startLevel != null){
+                        throw new Exception("More than One Start Indicated in file! Level: "+levelName);
+                    }
+                    startLevel=levelName;
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     
     public static void makeExists(){
         try{

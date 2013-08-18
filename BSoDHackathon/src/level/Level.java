@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import objects.Pillar;
 import objects.Player;
@@ -38,146 +39,72 @@ public class Level {
     public ArrayList<Sprite> sprites;
     public ArrayList<Sprite> setForRemove;
     
+    String map;
+    Player player;
+    ArrayList<String> maps;
+    
+    public Level(ArrayList<String> maps){
+        this.maps=maps;
+        map=maps.get(0);//TEMP
+    }
     
     public Level(String map,Player player,ArrayList<Sprite>objects) throws IOException{
         inst=this;
-        exits=new ArrayList<>();
-        sprites=objects;
-        setForRemove=new ArrayList<>();
-        //This code draws an image to a graphics thingy and gets the BufferedImage off of it
-        BufferedImage mapImage = ImageIO.read(new File(map));
-        int type = mapImage.getType();
-        if(type!=BufferedImage.TYPE_INT_RGB){
-            BufferedImage tempImage= new BufferedImage(mapImage.getWidth(),mapImage.getHeight(),BufferedImage.TYPE_INT_RGB);
-            Graphics g = tempImage.createGraphics();
-            g.drawImage(mapImage,0,0,null);
-            g.dispose();
-            mapImage=tempImage;
-        }
-        //Initializes the walls array
-        walls=new int[mapImage.getWidth()][mapImage.getHeight()];
-        wall=new Color[mapImage.getWidth()][mapImage.getHeight()];
-        int[] color=new int[3];
-        //The following loop parses through the buffered image, checking the colors
-        for(int i=0; i<mapImage.getWidth(); i++){
-            for(int j=0; j<mapImage.getHeight(); j++){
-                mapImage.getRaster().getPixel(i, j, color);
-                wall[i][j]=new Color(color[0], color[1],color[2]);
-                //depending on the color, it sets the wall value and/or adds an object
-                if(LevelMaster.isWall(wall[i][j]) && !isExit(color[0],color[1],color[2])){
-                    walls[i][j]=LevelMaster.getNum(wall[i][j]);
-                }else if (color[0]==255 && color[1]==255 && color[2]==0){
-                    walls[i][j]=0;//blank spot
-                    //sets the player's position to the current cell
-                    player.setPos(i*64+32,j*64+32);
-                }else if(isCD(color)){
-                    this.makeCD(color, i, j);
-                }
-                else if(isExit(color[0],color[1],color[2])){
-                    addDoor(i,j,color,player,map);
-                }
-                else{
-                    this.Zombie(color, i, j);
-                    walls[i][j]=0;
-                }
-//                
-//                if (color[0]==0 && color[1]==0 && color[2]==0){
-//                    walls[i][j]=1;//probably brick
-//                    LevelMaster.w.put(1, wall[i][j]);
-//                }     
-//                else if (color[0]==128 && color[1]==0 && color[2]==0){
-//                    walls[i][j]=2;//metal
-//                    LevelMaster.w.put(2, wall[i][j]);
-//                }
-//                else if (color[0]==0 && color[1]==128 && color[2]==0){
-//                    walls[i][j]=3;//another metal
-//                    LevelMaster.w.put(3, wall[i][j]);
-//                }
-//                else if (color[0]==0 && color[1]==0 && color[2]==128){
-//                    walls[i][j]=4;//I'm not even sure
-//                    LevelMaster.w.put(4, wall[i][j]);
-//                }else if(color[0]==200 && color[1]==200 && color[2]==200){
-//                    walls[i][j]=15;
-//                    LevelMaster.w.put(15, wall[i][j]);
-//                }else if(color[0]==100 && color[1]==100 && color[2]==100){
-//                    walls[i][j]=16;
-//                    LevelMaster.w.put(16, wall[i][j]);
-//                }else if(color[0]==100 && color[1]==50 && color[2]==25){
-//                    walls[i][j]=17;
-//                    LevelMaster.w.put(17, wall[i][j]);
-//                }else if(color[0]==150 && color[1]==150 && color[2]==150){
-//                    walls[i][j]=18;
-//                    LevelMaster.w.put(18, wall[i][j]);
-//                }else if(colorEqual(color, new Color(200,200,0))){
-//                    walls[i][j]=19;
-//                    LevelMaster.w.put(19, wall[i][j]);
-//                }else if(colorEqual(color, new Color(255,1,1))){
-//                    walls[i][j]=20;
-//                    LevelMaster.w.put(20, wall[i][j]);
-//                }else if(colorEqual(color, new Color(127,127,127))){
-//                    walls[i][j]=22;
-//                    LevelMaster.w.put(22, wall[i][j]);
-//                }else if(colorEqual(color, new Color(100,234,123))){
-//                    walls[i][j]=23;
-//                    LevelMaster.w.put(23, wall[i][j]);
-//                }else if(colorEqual(color, new Color(0,20,255))){
-//                    walls[i][j]=24;
-//                    LevelMaster.w.put(24, wall[i][j]);
-//                }else if(colorEqual(color, new Color(20,20,20))){
-//                    walls[i][j]=25;
-//                    LevelMaster.w.put(25, wall[i][j]);
-//                }else if(colorEqual(color, new Color(100,25,50))){
-//                    walls[i][j]=26;
-//                    LevelMaster.w.put(26, wall[i][j]);
-//                }else if(colorEqual(color, new Color(200,0,0))){
-//                    walls[i][j]=27;
-//                    LevelMaster.w.put(27, wall[i][j]);
-//                }else if(colorEqual(color, new Color(32,45,54))){
-//                    walls[i][j]=0;
-//                    
-//                }else if(colorEqual(color,new Color(176,0,0))){
-//                    walls[i][j]=28;
-//                    LevelMaster.w.put(28, wall[i][j]);
-//                }else if(colorEqual(color,new Color(176,0,176))){
-//                    walls[i][j]=29;
-//                    LevelMaster.w.put(29, wall[i][j]);
-//                }else if(colorEqual(color,new Color(177,0,0))){
-//                    walls[i][j]=30;
-//                    LevelMaster.w.put(30, wall[i][j]);
-//                }else if(colorEqual(color, new Color(122,174,225))){
-//                    walls[i][j]=31;
-//                    LevelMaster.w.put(31, wall[i][j]);
-//                }else if (color[0]==255 && color[1]==0 && color[2]==0){
-//                    walls[i][j]=0;//blank spot
-//                    //adds a pixelated column
-//                    objects.add(new Pillar(new Vector2(i*64+32,j*64+32)));
-//                }
-//                else if (color[0]==0 && color[1]==255 && color[2]==0){
-//                    walls[i][j]=0;//another blank spot
-//                }
-//                else if (color[0]==0 && color[1]==0 && color[2]==255){
-//                    walls[i][j]=0;//blank spot
-//                }
-//                else if (color[0]==255 && color[1]==255 && color[2]==0){
-//                    walls[i][j]=0;//blank spot
-//                    //sets the player's position to the current cell
-//                    player.setPos(i*64+32,j*64+32);
-//                }else if(isCD(color)){
-//                    this.makeCD(color, i, j);
-//                }
-//                else if(isExit(color[0],color[1],color[2])){
-//                    addDoor(i,j,color,player,map);
-////                    walls[i][j]=5;
-////                    LevelMaster.w.put(5, wall[i][j]);
-////                    exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j]));
-//                }
-//                else{
-//                    this.Zombie(color, i, j);
-//                    walls[i][j]=0;
-//                }
+        this.player=player;
+        this.map=new String(map);
+        this.make(player);
+    }
+    
+    public void make(Player p){
+        inst=this;
+        try {
+            this.player=p;
+            exits=new ArrayList<>();
+            sprites=new ArrayList<>();
+            setForRemove=new ArrayList<>();
+            //This code draws an image to a graphics thingy and gets the BufferedImage off of it
+            BufferedImage mapImage = ImageIO.read(new File(map));
+            int type = mapImage.getType();
+            if(type!=BufferedImage.TYPE_INT_RGB){
+                BufferedImage tempImage= new BufferedImage(mapImage.getWidth(),mapImage.getHeight(),BufferedImage.TYPE_INT_RGB);
+                Graphics g = tempImage.createGraphics();
+                g.drawImage(mapImage,0,0,null);
+                g.dispose();
+                mapImage=tempImage;
             }
+            //Initializes the walls array
+            walls=new int[mapImage.getWidth()][mapImage.getHeight()];
+            wall=new Color[mapImage.getWidth()][mapImage.getHeight()];
+            int[] color=new int[3];
+            //The following loop parses through the buffered image, checking the colors
+            for(int i=0; i<mapImage.getWidth(); i++){
+                for(int j=0; j<mapImage.getHeight(); j++){
+                    mapImage.getRaster().getPixel(i, j, color);
+                    wall[i][j]=new Color(color[0], color[1],color[2]);
+                    //depending on the color, it sets the wall value and/or adds an object
+                    if(LevelMaster.isWall(wall[i][j]) && !isExit(color[0],color[1],color[2])){
+                        walls[i][j]=LevelMaster.getNum(wall[i][j]);
+                    }else if (color[0]==255 && color[1]==255 && color[2]==0){
+                        walls[i][j]=0;//blank spot
+                        //sets the player's position to the current cell
+                        player.setPos(i*64+32,j*64+32);
+                    }else if(isCD(color)){
+                        this.makeCD(color, i, j);
+                    }
+                    else if(isExit(color[0],color[1],color[2])){
+                        addDoor(i,j,color,player,map);
+                    }
+                    else{
+                        this.Zombie(color, i, j);
+                        walls[i][j]=0;
+                    }
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Level.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
     }
+    
     public int[][] getWalls(){
         //returns the array
         return walls;
