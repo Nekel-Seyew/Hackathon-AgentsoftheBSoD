@@ -76,7 +76,7 @@ public class Main extends AGame{
         player=new Player(500,500,0);
 //        LevelMaster.makeExists();
         sprites=new ArrayList<Sprite>();
-         camera=new Camera(Math.PI/4,320,640,480);//Field of View, Number of Rays, Width, 
+        camera=new Camera(Math.PI/4,320,640,480);//Field of View, Number of Rays, Width, 
         LevelMaster.makeLevels();
         LevelMaster.makeWalls();
         LevelMaster.makeExists();
