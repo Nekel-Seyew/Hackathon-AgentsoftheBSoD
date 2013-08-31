@@ -52,12 +52,10 @@ public class LevelMaster {
             while(reader.hasNext()){
                 String string=reader.nextLine();
                 if(string.startsWith("$")){
-                    if(maps !=null){
-                        levels.put(levelName, new Level(maps));
-                    }else{
-                        maps=new ArrayList<String>();
-                    }
+                    maps=new ArrayList<>();
                     levelName=string.substring(string.indexOf("$")+1,string.indexOf("="));
+                }else if(string.trim().startsWith("}")){
+                    levels.put(levelName, new Level(maps));
                 }else if(string.contains("@") && !string.contains("#")){
                     String map=string.substring(string.indexOf("@")+1,string.indexOf(";"));
                     maps.add("Resources/Dungeons/"+map);

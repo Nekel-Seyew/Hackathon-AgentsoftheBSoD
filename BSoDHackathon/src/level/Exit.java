@@ -52,12 +52,19 @@ public class Exit {
     public Level next(Player p, boolean rebel){
         try {
             game.setLocation(next);
-            if(rebel){
-                return new Level("Resources/Dungeons/"+next.concat("2.png"), p, new ArrayList<Sprite>());
-            }else{
-                return new Level("Resources/Dungeons/"+next.concat(".png"), p, new ArrayList<Sprite>());
+            Level l=LevelMaster.levels.get(next);
+            if(!l.hasVisited()){
+                l.setVisited(true);
+                l.make();
             }
-        } catch (IOException ex) {
+            l.givePlayer(p);
+            return l;
+//            if(rebel){
+//                return new Level("Resources/Dungeons/"+next.concat("2.png"), p, new ArrayList<Sprite>());
+//            }else{
+//                return new Level("Resources/Dungeons/"+next.concat(".png"), p, new ArrayList<Sprite>());
+//            }
+        } catch (Exception ex) {
             Logger.getLogger(Exit.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             return null;
         }

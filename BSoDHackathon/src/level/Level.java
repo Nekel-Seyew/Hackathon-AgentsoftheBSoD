@@ -42,23 +42,25 @@ public class Level {
     String map;
     Player player;
     ArrayList<String> maps;
+    Vector2 playerStartPos;
+    boolean hasBeenVisited=false;
     
     public Level(ArrayList<String> maps){
         this.maps=maps;
         map=maps.get(0);//TEMP
+        this.make();
     }
     
     public Level(String map,Player player,ArrayList<Sprite>objects) throws IOException{
         inst=this;
         this.player=player;
         this.map=new String(map);
-        this.make(player);
+        this.make();
     }
     
-    public void make(Player p){
+    public void make(){
         inst=this;
         try {
-            this.player=p;
             exits=new ArrayList<>();
             sprites=new ArrayList<>();
             setForRemove=new ArrayList<>();
@@ -87,12 +89,13 @@ public class Level {
                     }else if (color[0]==255 && color[1]==255 && color[2]==0){
                         walls[i][j]=0;//blank spot
                         //sets the player's position to the current cell
-                        player.setPos(i*64+32,j*64+32);
+                        this.playerStartPos=new Vector2(i*64+32,j*64+32);
+//                        player.setPos(i*64+32,j*64+32);
                     }else if(isCD(color)){
                         this.makeCD(color, i, j);
                     }
                     else if(isExit(color[0],color[1],color[2])){
-                        addDoor(i,j,color,player,map);
+                        addDoor(i,j,color,map);
                     }
                     else{
                         this.Zombie(color, i, j);
@@ -103,6 +106,11 @@ public class Level {
         } catch (IOException ex) {
             Logger.getLogger(Level.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+    }
+    
+    public void givePlayer(Player p){
+        this.player=p;
+        p.setPos(this.playerStartPos.getX(), this.playerStartPos.getY());
     }
     
     public int[][] getWalls(){
@@ -167,7 +175,7 @@ public class Level {
         }
     }
     
-    public void addDoor(int i, int j, int[] color, Player p, String s){
+    public void addDoor(int i, int j, int[] color, String s){
         Color c=new Color(color[0], color[1], color[2]);
         Color player=new Color(255,255,0);
         exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j],s));
@@ -241,5 +249,13 @@ public class Level {
             String s=LevelMaster.NPC.get(new Color(122,35,111));
             sprites.add(new Zombie(s,new Vector2(i*64+32,j*64+32)));
         }
+    }
+    
+    public void setVisited(boolean b){
+        this.hasBeenVisited=b;
+    }
+    
+    public boolean hasVisited(){
+        return this.hasBeenVisited;
     }
 }

@@ -77,17 +77,19 @@ public class Main extends AGame{
 //        LevelMaster.makeExists();
         sprites=new ArrayList<Sprite>();
          camera=new Camera(Math.PI/4,320,640,480);//Field of View, Number of Rays, Width, 
-        LevelMaster.makeLevels();
+        LevelMaster.makeItemsAndNPC();
+         LevelMaster.makeLevels();
         LevelMaster.makeWalls();
         LevelMaster.makeExists();
-        LevelMaster.makeItemsAndNPC();
+//        LevelMaster.makeItemsAndNPC();
 //        try {
 //            level=new Level("Resources/Dungeons/train.png",player,sprites);
 //        } catch (IOException ex) {
 //            Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
         level=LevelMaster.levels.get(LevelMaster.startLevel);
-        level.make(player);
+        level.make();
+        level.setVisited(true);
         //camera=new Camera(Math.PI/4,1279,640,480); //MAX RAY COUNT
         camera.setLevel(level.getWalls()); //
         particles=new ParticleManager(Color.BLUE,-0.1,0.5,0,false,300);//color,gravity,bounciness,air resistance,stickiness,lifetime
@@ -159,7 +161,7 @@ public class Main extends AGame{
             if(player.hasWon()){
                 this.hasWon=true;
             }
-            if(player.getHelath() < -10){
+            if(player.getHelath() <= 0){
                 this.isDead=true;
             }
             this.updateTimer=System.currentTimeMillis();
@@ -186,7 +188,7 @@ public class Main extends AGame{
                 Rect r = new Rect(0, 0, (int) begin.getWidth(), (int) begin.getHeight(), 0);
                 begin.Draw(batch, 0f, r, 3f, 3f);
             }
-        } else if (!isStart && (!isDead || !hasWon)) {
+        } else if (!isStart && (!isDead && !hasWon)) {
             if (!menu.exitMenu) {
                 menu.Draw(batch);
             }
