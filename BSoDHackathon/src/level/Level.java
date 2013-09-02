@@ -106,6 +106,45 @@ public class Level {
         } catch (IOException ex) {
             Logger.getLogger(Level.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        for(int i=0; i<wall.length; i++){
+            for(int j=0; j<wall[i].length; j++){
+                Color c=wall[i][j];
+                double angleToExit=0;
+                Vector2 exitLocation=new Vector2();
+                if(isExit(c.getRed(), c.getGreen(), c.getBlue())){
+                    if(this.isEmptySpace(i+1, j)){
+                        angleToExit=Math.PI;
+                        exitLocation.setX((i+1)*64+32);
+                        exitLocation.setY((j)*64+32);
+                    }else if(this.isEmptySpace(i-1, j)){
+                        angleToExit=0;
+                        exitLocation.setX((i-1)*64+32);
+                        exitLocation.setY((j)*64+32);
+                    }else if(this.isEmptySpace(i, j+1)){
+                        angleToExit=-Math.PI/2;
+                        exitLocation.setX((i)*64+32);
+                        exitLocation.setY((j+1)*64+32);
+                    }else if(this.isEmptySpace(i, j-1)){
+                        angleToExit=Math.PI/2;
+                        exitLocation.setX((i)*64+32);
+                        exitLocation.setY((j-1)*64+32);
+                    }
+                    for(Exit e: exits){
+                        if(e.color.equals(c)){
+                            e.setAngle(angleToExit);
+                            e.playerExitPosition=exitLocation;
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    public void givePlayer(Player p, Vector2 pos, double dir){
+        this.player=p;
+        p.setPos(pos.getX(), pos.getY());
+        
     }
     
     public void givePlayer(Player p){
@@ -127,17 +166,6 @@ public class Level {
         return (wall(x,y)||wall(x-r,y)||wall(x+r,y)||wall(x,y-r)||wall(x,y+r)
                 ||wall(x-r,y-r)||wall(x+r,y+r)||wall(x+r,y-r)||wall(x-r,y+r));
     }
-//    public int cell(double X, double Y) {
-//        //returns the cell value at the cell containing the given point
-//        int cellX = (int) Math.floor(X / cellSize);
-//        int cellY = (int) Math.floor(Y / cellSize);
-//        try{
-//            return walls[cellX][cellY];
-//        }
-//        catch(Exception e){
-//            return 1;
-//        }
-//    }
     public boolean wall(double X, double Y) {
         //returns whether or not the cell value at the given point is greater than zero
         //i.e. is a solid wall
@@ -180,37 +208,18 @@ public class Level {
         Color player=new Color(255,255,0);
         exits.add(new Exit(LevelMaster.exits.get(wall[i][j]),new Vector2(i*64+32,j*64+32),wall[i][j],s));
         walls[i][j]=LevelMaster.getNum(c);
-//        if(color[0]==128 && color[1]==60 && color[2]==60){
-//            walls[i][j]=5;
-//            LevelMaster.w.put(5, wall[i][j]);
-//        }else if(color[0]==128 && color[1]==10 && color[2]==60){
-//            walls[i][j]=6;
-//            LevelMaster.w.put(6, wall[i][j]);
-//        }else if(color[0]==60 && color[1]==10 && color[2]==60){
-//            walls[i][j]=7;
-//            LevelMaster.w.put(7, wall[i][j]);
-//        }else if(color[0]==255 && color[1]==255 && color[2]==10){
-//            walls[i][j]=8;
-//            LevelMaster.w.put(8, wall[i][j]);
-//        }else if(color[0]==10 && color[1]==248 && color[2]==255){
-//            walls[i][j]=9;
-//            LevelMaster.w.put(9, wall[i][j]);
-//        }else if(color[0]==255 && color[1]==255 && color[2]==128){
-//            walls[i][j]=10;
-//            LevelMaster.w.put(10, wall[i][j]);
-//        }else if(color[0]==60 && color[1]==60 && color[2]==50){
-//            walls[i][j]=11;
-//            LevelMaster.w.put(11, wall[i][j]);
-//        }else if(color[0]==128 && color[1]==234 && color[2]==126){
-//            walls[i][j]=12;
-//            LevelMaster.w.put(12, wall[i][j]);
-//        }else if(color[0]==255 && color[1]==5 && color[2]==5){
-//            walls[i][j]=13;
-//            LevelMaster.w.put(13, wall[i][j]);
-//        }else if(color[0]==101 && color[1]==101 && color[2]==101){
-//            walls[i][j]=14;
-//            LevelMaster.w.put(14, wall[i][j]);
-//        }
+    }
+    
+    public boolean isEmptySpace(int i, int j){
+        try{
+            if(wall[i][j].equals(Color.white)){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(ArrayIndexOutOfBoundsException e){
+            return false;
+        }
     }
     
     public boolean isExit(int r, int g, int b){
@@ -219,6 +228,10 @@ public class Level {
     
     public boolean colorEqual(int[] color, Color c){
         return color[0]==c.getRed() && color[1]==c.getGreen() && color[2]==c.getBlue();
+    }
+    
+    public void randomItem(){
+        //TODO: finish randomItem function.
     }
     
     public boolean isCD(int[] color){

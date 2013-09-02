@@ -62,45 +62,39 @@ public class Main extends AGame{
     
     @Override
     public void InitializeAndLoad() {
-        inst=this;
-        hasWon=false;
-        isDead=false;
-        menu=new Menu();
-        isStart=true;
-        startTimer=System.currentTimeMillis();
-        startSound=new SoundFile("Resources/Sound/long_sound_1.wav",0);
+        inst = this;
+        hasWon = false;
+        isDead = false;
+        menu = new Menu();
+        isStart = true;
+        startTimer = System.currentTimeMillis();
+        startSound = new SoundFile("Resources/Sound/long_sound_1.wav", 0);
 //        begin=new Animation(71,0,new Vector2(400,300),250);
 //        new Thread(new makeIntro()).start();
         
-        isRebellionHappening=false;
-        player=new Player(500,500,0);
+        isRebellionHappening = false;
+        player = new Player(500, 500, 0);
 //        LevelMaster.makeExists();
-        sprites=new ArrayList<Sprite>();
-         camera=new Camera(Math.PI/4,320,640,480);//Field of View, Number of Rays, Width, 
+        sprites = new ArrayList<Sprite>();
+        camera = new Camera(Math.PI / 4, 640, 640, 480);//Field of View, Number of Rays, Width, 
         LevelMaster.makeItemsAndNPC();
-         LevelMaster.makeLevels();
+        LevelMaster.makeLevels();
         LevelMaster.makeWalls();
         LevelMaster.makeExists();
-//        LevelMaster.makeItemsAndNPC();
-//        try {
-//            level=new Level("Resources/Dungeons/train.png",player,sprites);
-//        } catch (IOException ex) {
-//            Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-        level=LevelMaster.levels.get(LevelMaster.startLevel);
+        level = LevelMaster.levels.get(LevelMaster.startLevel);
         level.make();
         level.setVisited(true);
         //camera=new Camera(Math.PI/4,1279,640,480); //MAX RAY COUNT
         camera.setLevel(level.getWalls()); //
-        particles=new ParticleManager(Color.BLUE,-0.1,0.5,0,false,300);//color,gravity,bounciness,air resistance,stickiness,lifetime
+        particles = new ParticleManager(Color.BLUE, -0.1, 0.5, 0, false, 300);//color,gravity,bounciness,air resistance,stickiness,lifetime
         this.setBackgroundColor(Color.BLACK);
         
-        isStart=true;
-        begin=new Animation(70,0,new Vector2(400,300),250);
+        isStart = true;
+        begin = new Animation(70, 0, new Vector2(400, 300), 250);
         makeIntro();
-        startSound=new SoundFile("Resources/Sound/long_sound_1.wav",0);
+        startSound = new SoundFile("Resources/Sound/long_sound_1.wav", 0);
         startSound.start();
-        startTimer=System.currentTimeMillis();
+        startTimer = System.currentTimeMillis();
         
         
     }
@@ -260,11 +254,8 @@ public class Main extends AGame{
     public void setLocation(String loc){
         this.currentLocation=new String(loc);
     }
-    
-    private class makeIntro implements Runnable{
-        public void run(){
-            makeIntro();
-        }
+    public String getLocation(){
+        return this.currentLocation;
     }
     
     public void cycleIncrease(){

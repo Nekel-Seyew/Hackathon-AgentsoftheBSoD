@@ -191,4 +191,8 @@ public class Player {
     public double getHelath(){
         return this.health;
     }
+    
+    public void giveDir(double dir){
+        this.direction=dir;
+    }
 }

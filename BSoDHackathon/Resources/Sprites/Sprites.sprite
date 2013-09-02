@@ -4,6 +4,8 @@
 #NPC:{122,35,111,@Guy4Sprites};
 
 #Item:{22,22,22,@health.png};
+#Item:{200,200,200,@tombstone1.png}
+#Item:{100,100,100,@tombstone2.png}
 
 #Story:{32,32,0,@0};
 #Story:{32,32,1,@1};
