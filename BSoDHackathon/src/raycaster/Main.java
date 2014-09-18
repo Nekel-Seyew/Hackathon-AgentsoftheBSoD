@@ -5,6 +5,7 @@
 package raycaster;
 
 import Hardware_Accelerated.AGame;
+import Hardware_Accelerated.AccelGame;
 import MenuAndStory.Menu;
 import Utilities.Animation;
 import Utilities.FontStyle;
@@ -18,9 +19,8 @@ import bsodhackathon.BSoDHackathon;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Logger;
+import javax.swing.JComponent;
 import level.Level;
 import level.LevelMaster;
 import objects.ParticleManager;
@@ -60,6 +60,9 @@ public class Main extends AGame{
     
     long updateTimer=System.currentTimeMillis();
     
+    boolean first=true;
+    
+    
     @Override
     public void InitializeAndLoad() {
         inst = this;
@@ -76,16 +79,16 @@ public class Main extends AGame{
         player = new Player(500, 500, 0);
 //        LevelMaster.makeExists();
         sprites = new ArrayList<Sprite>();
-        camera = new Camera(Math.PI / 4, 640, 640, 480);//Field of View, Number of Rays, Width, 
-        LevelMaster.makeItemsAndNPC();
-        LevelMaster.makeLevels();
-        LevelMaster.makeWalls();
-        LevelMaster.makeExists();
-        level = LevelMaster.levels.get(LevelMaster.startLevel);
-        level.make();
-        level.setVisited(true);
-        //camera=new Camera(Math.PI/4,1279,640,480); //MAX RAY COUNT
-        camera.setLevel(level.getWalls()); //
+//        camera = new Camera(Math.PI / 4, 1270, 640, 480);//Field of View, Number of Rays, Width, 
+//        LevelMaster.makeItemsAndNPC();
+//        LevelMaster.makeLevels();
+//        LevelMaster.makeWalls();
+//        LevelMaster.makeExists();
+//        level = LevelMaster.levels.get(LevelMaster.startLevel);
+//        level.make();
+//        level.setVisited(true);
+//        //camera=new Camera(Math.PI/4,1279,640,480); //MAX RAY COUNT
+//        camera.setLevel(level.getWalls()); //
         particles = new ParticleManager(Color.BLUE, -0.1, 0.5, 0, false, 300);//color,gravity,bounciness,air resistance,stickiness,lifetime
         this.setBackgroundColor(Color.BLACK);
         
@@ -93,9 +96,8 @@ public class Main extends AGame{
         begin = new Animation(70, 0, new Vector2(400, 300), 250);
         makeIntro();
         startSound = new SoundFile("Resources/Sound/long_sound_1.wav", 0);
-        startSound.start();
-        startTimer = System.currentTimeMillis();
-        
+//        startSound.start();
+//        startTimer = System.currentTimeMillis();
         
     }
 
@@ -106,6 +108,13 @@ public class Main extends AGame{
 
     @Override
     public void Update() {
+        if(first){
+            startSound.start();
+            startTimer= System.currentTimeMillis();
+//            mouse.captureMouse(true, new Vector2(400,300), new Vector2(800,600), AccelGame.gui);
+            first=false;
+        }
+        
         if ((!isStart && menu.exitMenu) && (!isDead || !hasWon) ){//&& System.currentTimeMillis()-this.updateTimer >=16) {
             player.update(level);
             //player movement
@@ -119,6 +128,11 @@ public class Main extends AGame{
             if (keyboard.isKeyDown('s') || keyboard.isKeyDown(KeyEvent.VK_DOWN) || keyboard.isKeyDown(KeyBoard.Two)) {
                 player.moveBackwards(level);
             }
+//            if(mouse.dx() != 0){
+//                player.turn(mouse.dx());
+//                camera.screwFloor(0.5);
+//            }
+            
             if (keyboard.isKeyDown(KeyEvent.VK_RIGHT) || keyboard.isKeyDown(KeyBoard.Six)) {
                 player.turnRight();
                 camera.screwFloor(0.5);
@@ -162,7 +176,7 @@ public class Main extends AGame{
         }else if(!menu.exitMenu){
             menu.Update(keyboard,player);
         }
-        else{
+        else{//isStart==true
             if(keyboard.isKeyDown(KeyEvent.VK_SPACE)){
                 isStart=false;
                 if(startSound.isAlive()){
@@ -263,4 +277,32 @@ public class Main extends AGame{
         this.cycleNum%=60;
     }
     
+    public void giveResolutionAndQuality(int x, int y, String qual){
+        //camera = new Camera(Math.PI / 4, 640, 640, 480);
+        switch(qual){
+            case "Low":
+                camera=new Camera(Math.PI/4, 320, x,y);
+                break;
+            case "Med":
+                camera=new Camera(Math.PI/4, 640, x,y);
+                break;
+            case "High":
+                camera=new Camera(Math.PI/4, 960, x,y);
+                break;
+            case "Ultra":
+                camera=new Camera(Math.PI/4, 1270, x,y);
+                break;
+            default:
+                camera=new Camera(Math.PI/4, 320, x,y);
+        }
+        LevelMaster.makeItemsAndNPC();
+        LevelMaster.makeLevels();
+        LevelMaster.makeWalls();
+        LevelMaster.makeExists();
+        level = LevelMaster.levels.get(LevelMaster.startLevel);
+        level.make();
+        level.setVisited(true);
+        //camera=new Camera(Math.PI/4,1279,640,480); //MAX RAY COUNT
+        camera.setLevel(level.getWalls()); //
+    }
 }

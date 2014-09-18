@@ -4,6 +4,7 @@
  */
 package bsodhackathon;
 
+import MenuAndStory.StartAndOptions;
 import raycaster.Raycaster;
 
 /**
@@ -16,6 +17,7 @@ public class BSoDHackathon {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Raycaster.main(args);
+        StartAndOptions.main(args);
+        //Raycaster.main(args);
     }
 }

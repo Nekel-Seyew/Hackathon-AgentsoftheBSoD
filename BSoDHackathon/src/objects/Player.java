@@ -74,6 +74,14 @@ public class Player {
         }
         
     }
+    
+    public void turn(double dx){
+        direction-=dx;
+        if (direction<=0){
+            direction+=Math.PI*2;
+        }
+    }
+    
     public void update(Level level){
         double s=Math.sqrt(hspeed*hspeed+vspeed*vspeed);
         z=32+s*Math.sin(bob)/2;
