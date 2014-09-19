@@ -24,9 +24,7 @@ public class Player {
     double hspeed;
     double vspeed;
     double dirspeed;
-    double cellSize;
     double z;
-    double zdirection;
     double radius=3;
     double bob;
     boolean moving;
@@ -40,6 +38,8 @@ public class Player {
     
     double health;
     
+    public Vector2 dir;
+    
     public Player(double x, double y, double angle){
         pos=new Vector2(x,y);
         direction=angle;
@@ -47,7 +47,6 @@ public class Player {
         hspeed=0;
         vspeed=0;
         dirspeed=Math.PI/90;
-        cellSize=64;
         z=32;
         bob=0;
         moving=false;
@@ -56,6 +55,8 @@ public class Player {
         entries=new ArrayList<>();
         entries.add(StoryJournal.story.get(0));
         health=100;
+        dir = new Vector2(1,0);//angle of zero
+        this.rotateDirectionVector(angle);
     }
     public double speed(){
         return Math.sqrt(hspeed*hspeed+vspeed*vspeed);
@@ -149,8 +150,11 @@ public class Player {
     public double getZ(){
         return z;
     }
-    public double getDir(){
+    public double getDirection(){
         return direction;
+    }
+    public Vector2 getDir(){
+        return dir;
     }
     public void setPos(double x,double y){
         pos=new Vector2(x,y);
@@ -202,5 +206,11 @@ public class Player {
     
     public void giveDir(double dir){
         this.direction=dir;
+    }
+    
+    private void rotateDirectionVector(double angle){
+        double[][] rotMatrix = new double[][]{{Math.cos(angle),-Math.sin(angle)},{Math.sin(angle),Math.cos(angle)}};
+        this.dir.setX(rotMatrix[0][0]*this.dir.getX() + rotMatrix[0][1]*this.dir.getY());
+        this.dir.setY(rotMatrix[1][0]*this.dir.getX() + rotMatrix[1][1]*this.dir.getY());
     }
 }

@@ -10,7 +10,7 @@ import java.awt.Color;
 
 /**
  *
- * @author pcowal15
+ * @author pcowal15 and kyle sweeney
  */
 public class Raycaster {
 

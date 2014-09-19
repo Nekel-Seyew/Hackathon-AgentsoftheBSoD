@@ -79,16 +79,6 @@ public class Main extends AGame{
         player = new Player(500, 500, 0);
 //        LevelMaster.makeExists();
         sprites = new ArrayList<Sprite>();
-//        camera = new Camera(Math.PI / 4, 1270, 640, 480);//Field of View, Number of Rays, Width, 
-//        LevelMaster.makeItemsAndNPC();
-//        LevelMaster.makeLevels();
-//        LevelMaster.makeWalls();
-//        LevelMaster.makeExists();
-//        level = LevelMaster.levels.get(LevelMaster.startLevel);
-//        level.make();
-//        level.setVisited(true);
-//        //camera=new Camera(Math.PI/4,1279,640,480); //MAX RAY COUNT
-//        camera.setLevel(level.getWalls()); //
         particles = new ParticleManager(Color.BLUE, -0.1, 0.5, 0, false, 300);//color,gravity,bounciness,air resistance,stickiness,lifetime
         this.setBackgroundColor(Color.BLACK);
         
@@ -201,7 +191,7 @@ public class Main extends AGame{
                 menu.Draw(batch);
             }
             player.Draw(batch);
-            camera.castRays(batch, player.getX(), player.getY(), player.getDir());
+            camera.castRays(batch, player.getX(), player.getY(), player.getDirection());
             if (sprites != null) {
                 for (Sprite o : sprites) {
                     camera.drawImage(batch, player, o.sprite(), o.x(), o.y(), true);

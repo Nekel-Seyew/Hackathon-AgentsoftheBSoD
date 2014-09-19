@@ -113,6 +113,12 @@ public class Camera {
         }
         floorindex %= 3;
     }
+    
+    public void castRays(ImageCollection batch, Player p){
+        //Gets a perpendicular from direcion
+        Vector2 plane = p.getDir().clone();
+        Camera.rotateVector2(90, plane);
+    }
 
     public void castRays(ImageCollection batch, double X, double Y, double Angle) {
         cycleDone=false;
@@ -437,7 +443,7 @@ public class Camera {
     public void drawImage(ImageCollection batch, Level level, Player player, String sprite, double X, double Y, boolean fog) {
         x = player.getX();
         y = player.getY();
-        angle = player.getDir();
+        angle = player.getDirection();
         double angle2 = -Math.atan2(Y - y, X - x);
 
         double dist = Math.sqrt((X - x) * (X - x) + (Y - y) * (Y - y));
@@ -455,7 +461,7 @@ public class Camera {
     public void drawImage(ImageCollection batch, Player player, Animation sprite, double X, double Y, boolean fog){
         x = player.getX();
         y = player.getY();
-        angle = player.getDir();
+        angle = player.getDirection();
         double angle2 = -Math.atan2(Y - y, X - x);
 
         double dist = Math.sqrt((X - x) * (X - x) + (Y - y) * (Y - y));
@@ -481,7 +487,7 @@ public class Camera {
     public void drawImage(ImageCollection batch, Player player, Image2D sprite, double X, double Y, boolean fog) {
         x = player.getX();
         y = player.getY();
-        angle = player.getDir();
+        angle = player.getDirection();
         double angle2 = -Math.atan2(Y - y, X - x);
 
         double dist = Math.sqrt((X - x) * (X - x) + (Y - y) * (Y - y));
@@ -506,7 +512,7 @@ public class Camera {
     public void drawParticle(ImageCollection batch, Player player, double X, double Y, double Z, Color color) {
         x = player.getX();
         y = player.getY();
-        angle = player.getDir();
+        angle = player.getDirection();
         double angle2 = -Math.atan2(Y - y, X - x);
         Z = (cellSize / 2 - Z) / cellSize + zoffset;
         double dist = Math.sqrt((X - x) * (X - x) + (Y - y) * (Y - y));
@@ -519,5 +525,11 @@ public class Camera {
             batch.fillRect(new Vector2(screenX - rectWidth / 2, screenHeight / 2 + Z * rectWidth * cellSize + zangle - rectWidth / 2), (int) rectWidth, (int) rectWidth, color, (int) (rectWidth * cellSize) + 1000);
 
         }
+    }
+    
+    public static void rotateVector2(double angle, Vector2 vec){
+        double[][] rotMatrix = new double[][]{{Math.cos(angle),-Math.sin(angle)},{Math.sin(angle),Math.cos(angle)}};
+        vec.setX(rotMatrix[0][0]*vec.getX() + rotMatrix[0][1]*vec.getY());
+        vec.setY(rotMatrix[1][0]*vec.getX() + rotMatrix[1][1]*vec.getY());
     }
 }
