@@ -116,8 +116,26 @@ public class Camera {
     
     public void castRays(ImageCollection batch, Player p){
         //Gets a perpendicular from direcion
-        Vector2 plane = p.getDir().clone();
+        Vector2 playerDir = p.getDir();
+        Vector2 plane = playerDir.clone();
         Camera.rotateVector2(90, plane);
+        for(int x=0; x<rayCount; x++){
+            double cameraPlaneRayX = 2 * x / (rayCount*1.0) -1; //this makes the right most edge 1 of plane 1, center 0, and left most edge -1.
+            Vector2 rayPos = p.pos.clone();
+            Vector2 rayDir = new Vector2(playerDir.getX() + plane.getX()*cameraPlaneRayX, playerDir.getY() + plane.getX()*cameraPlaneRayX);
+            
+            Vector2 map = new Vector2((int)rayPos.getX(),(int)rayPos.getY());//may replace with rayPos.clone() later
+            
+            Vector2 sideDist= new Vector2();
+            Vector2 deltaDist = new Vector2(Math.sqrt(1 + Math.pow(rayDir.getY(), 2)/Math.pow(rayDir.getX(), 2)),
+                                            Math.sqrt(1 + Math.pow(rayDir.getX(), 2)/Math.pow(rayDir.getY(), 2)));
+            double pertWallDist;
+            int stepX,stepY;
+            boolean hitWall=false;
+            int side;
+            //Before we start DDA, need to set up stepX and stepY
+            
+        }
     }
 
     public void castRays(ImageCollection batch, double X, double Y, double Angle) {
