@@ -192,6 +192,7 @@ public class Main extends AGame{
             }
             player.Draw(batch);
             camera.castRays(batch, player.getX(), player.getY(), player.getDirection());
+            //camera.castRays(batch, player);
             if (sprites != null) {
                 for (Sprite o : sprites) {
                     camera.drawImage(batch, player, o.sprite(), o.x(), o.y(), true);

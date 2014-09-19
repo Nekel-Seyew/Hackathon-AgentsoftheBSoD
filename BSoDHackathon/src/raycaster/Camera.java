@@ -132,8 +132,74 @@ public class Camera {
             double pertWallDist;
             int stepX,stepY;
             boolean hitWall=false;
-            int side;
+            int side=0;
             //Before we start DDA, need to set up stepX and stepY
+            if(rayDir.getX() < 0){
+                stepX = -1;
+                sideDist.setX((rayPos.getX() - map.getX())*deltaDist.getX());
+            }else{
+                stepX = 1;
+                sideDist.setX((map.getX()+1.0-rayPos.getX())*deltaDist.getX());
+            }
+            if(rayDir.getY() < 0){
+                stepY = -1;
+                sideDist.setY((rayPos.getY() - map.getY())*deltaDist.getY());
+            }else{
+                stepY = 1;
+                sideDist.setY((map.getY()+1.0-rayPos.getY())*deltaDist.getY());
+            }
+            //Time to Start the DDA
+            while(!hitWall){
+                //go to next map square, or in x direction, or in y direction
+                if(sideDist.getX() < sideDist.getY()){
+                    sideDist.dX(deltaDist.getX());
+                    map.dX(stepX);
+                    side =0;
+                }else{
+                    sideDist.dY(deltaDist.getY());
+                    map.dY(stepY);
+                    side=1;
+                }
+                if(level[(int)map.getX()][(int)map.getY()] > 0){
+                    hitWall=true;
+                }
+            }
+            //Time To calculate the distance
+            //We calculate the distance projected on the camera direction. 
+            //Oblique distances will give the fisheye effect. Keep in mind for possible feature addition.
+            if(side == 0){
+                pertWallDist = Math.abs((map.getX()-rayPos.getX() + (1-stepX)/2)/rayDir.getX());
+            }else{
+                pertWallDist = Math.abs((map.getY()-rayPos.getY() + (1-stepY)/2)/rayDir.getY());
+            }
+            
+            //Time to calculate the height of the vertical line to draw.
+            
+            int lineHeight = Math.abs((int)(screenHeight/pertWallDist));
+            int drawStart =(int)( -lineHeight/2 + screenHeight/2);
+            if(drawStart<0)drawStart=0;
+            int drawEnd=(int)(lineHeight/2 + screenHeight/2);
+            if(drawEnd>=screenHeight) drawEnd = (int)screenHeight+1;
+            
+            //time to draw
+            int tex = level[(int)map.getX()][(int)map.getY()];
+            if(tex>0){
+                Color a = LevelMaster.w.get(tex);
+                Object w = LevelMaster.walls.get(a);
+                double wallX=0;
+                if(side == 1) wallX = rayPos.getX() + ((map.getY()-rayPos.getY()+(1-stepY)/2)/rayDir.getY())*rayDir.getX();
+                else wallX = rayPos.getY() + ((map.getX()-rayPos.getX()+(1-stepX)/2)/rayDir.getX())*rayDir.getY();
+                wallX -= Math.floor(wallX);
+                if(w instanceof Image2D){
+                    Image2D sprite = (Image2D)w;
+                    int texX = (int)(wallX*sprite.getWidth());
+                    if(side ==0 && rayDir.getX()>0) texX = sprite.getWidth() - texX -1;
+                    if(side == 1 && rayDir.getY() < 0) texX = sprite.getWidth() -texX -1;
+                    Vector2 drawPos = new Vector2(screenWidth/rayCount * x, screenHeight/2);
+                    Rect sliver = new Rect(new Vector2(texX,0),1,64);
+                    batch.Draw(sprite, drawPos, 0f, 1, (1f*lineHeight)/sprite.getHeight(), sliver, 100);
+                }
+            }
             
         }
     }
