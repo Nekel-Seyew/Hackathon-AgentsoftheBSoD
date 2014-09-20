@@ -118,10 +118,13 @@ public class Camera {
         //Gets a perpendicular from direcion
         Vector2 playerDir = p.getDir();
         Vector2 plane = playerDir.clone();
-        Camera.rotateVector2(90, plane);
+        Camera.rotateVector2(-Math.PI/2, plane);
         for(int x=0; x<rayCount; x++){
             double cameraPlaneRayX = 2 * x / (rayCount*1.0) -1; //this makes the right most edge 1 of plane 1, center 0, and left most edge -1.
             Vector2 rayPos = p.pos.clone();
+            rayPos.dX(-32);rayPos.dY(-32);
+            rayPos.setX(rayPos.getX()/64);rayPos.setY(rayPos.getY()/64);
+            
             Vector2 rayDir = new Vector2(playerDir.getX() + plane.getX()*cameraPlaneRayX, playerDir.getY() + plane.getX()*cameraPlaneRayX);
             
             Vector2 map = new Vector2((int)rayPos.getX(),(int)rayPos.getY());//may replace with rayPos.clone() later
@@ -190,8 +193,8 @@ public class Camera {
                 if(side == 1) wallX = rayPos.getX() + ((map.getY()-rayPos.getY()+(1-stepY)/2)/rayDir.getY())*rayDir.getX();
                 else wallX = rayPos.getY() + ((map.getX()-rayPos.getX()+(1-stepX)/2)/rayDir.getX())*rayDir.getY();
                 wallX -= Math.floor(wallX);
-                if(w instanceof Image2D){
-                    Image2D sprite = (Image2D)w;
+                if(w instanceof Image2D[]){
+                    Image2D sprite = ((Image2D[])w)[x];
                     int texX = (int)(wallX*sprite.getWidth());
                     if(side ==0 && rayDir.getX()>0) texX = sprite.getWidth() - texX -1;
                     if(side == 1 && rayDir.getY() < 0) texX = sprite.getWidth() -texX -1;
