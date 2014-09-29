@@ -185,6 +185,10 @@ public class Camera {
             if(drawEnd>=screenHeight) drawEnd = (int)screenHeight+1;
             
             //time to draw
+            //new idea: instead of having to build a massive database of all the different wall textures,
+            //why not just fetch the string of the resource needed, and then make a new image and draw that.
+            //Since the Image2D class is really just a data holder, and the physical data will be stored in
+            //the class, not the instance. Requires reworking almost everything. Consider full re-write in new package.
             int tex = level[(int)map.getX()][(int)map.getY()];
             if(tex>0){
                 Color a = LevelMaster.w.get(tex);
