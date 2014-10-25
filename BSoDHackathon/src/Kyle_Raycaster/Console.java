@@ -95,6 +95,23 @@ public class Console extends javax.swing.JFrame {
         //Do nothing, but this method does nothing. Really, it's the property "set editable"
     }//GEN-LAST:event_OutKeyPressed
 
+    
+    //PARSE COMMAND
+    public static void parse(String in){
+        if(in.indexOf('\n') > -1){
+            in = in.substring(0, in.indexOf('\n'));
+        }
+        
+        String[] args = in.split(" ");
+        //RPN: <operand> [<arg1> ...]
+        
+    }
+    
+    public static void add(Object a){
+        
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
