@@ -18,6 +18,7 @@ import Utilities.Vector2;
 import bsodhackathon.BSoDHackathon;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JComponent;
@@ -178,6 +179,8 @@ public class Main extends AGame{
 
     @Override
     public void Draw(Graphics2D g, ImageCollection batch) {
+        RenderingHints rh = new RenderingHints(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_SPEED);
+        g.setRenderingHints(rh);
         if (isStart) {
             if (System.currentTimeMillis() - startTimer >= 15250) {
                 isStart = false;
